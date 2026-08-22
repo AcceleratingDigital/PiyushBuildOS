@@ -48,12 +48,13 @@ CONFIGURATION=Debug ./scripts/build-skill.sh <Name> <Name> <HOS<Name>Skill> com.
 **When a grep returns no matches, try the other path before reporting FAIL.**
 False positives waste pipeline time.
 
-| Date | Skill | Check | Result | Notes |
-|---|---|---|---|---|
-| 2026-08-15 | NotesRead | All 4 | PASS | No force unwraps (all ! are boolean negations) |
-| 2026-08-15 | JournalRead | All 4 | PASS | algolia/medium correctly identified no force unwraps |
-| 2026-08-16 | Credential Vault | Code review | PASS | Per-member Keychain namespacing, 5 VaultEntry fields, setup wizard, migration script. Build passes. No tests (stub only). |
-| 2026-08-16 | Error Logging | Code review | PASS | ErrorLogger structured logging, 7 categories (5 required + 2 extra), dual output, admin view with filtering. Build passes. No tests (stub only). |
+|| Date | Skill | Check | Result | Notes |
+||---|---|---|---|---|
+|| 2026-08-15 | NotesRead | All 4 | PASS | No force unwraps (all ! are boolean negations) |
+|| 2026-08-15 | JournalRead | All 4 | PASS | algolia/medium correctly identified no force unwraps |
+|| 2026-08-16 | Credential Vault | Code review | PASS | Per-member Keychain namespacing, 5 VaultEntry fields, setup wizard, migration script. Build passes. No tests (stub only). |
+|| 2026-08-16 | Error Logging | Code review | PASS | ErrorLogger structured logging, 7 categories (5 required + 2 extra), dual output, admin view with filtering. Build passes. No tests (stub only). |
+|| 2026-08-18 | stale-doc-cleanup | Docs QA | PASS | Verified 7 acceptance criteria: E2/D3/F4 stale refs fixed, emitKnowledge 3-param, gateway clarified, model names marked, 5+ files updated, no regressions, 3+ commits. Git diff shows all changes. |
 
 ## Force unwrap detection
 
@@ -93,6 +94,17 @@ QA pattern than skills:
 - `status-ready-for-qa` GID: 1217508257505680
 - `status-qa-passed` GID: 1217508019549179
 - `status-blocked` GID: 1217507685607284
-- Tag lookup: `curl -s -H "Authorization: Bearer $ASANA_TOKEN" "https://app.asana.com/api/1.0/tags?workspace=77904846009970"` (returns all tags, filter by name — the `name=` query param doesn't filter server-side, it returns the full list)
+- Tag lookup: `curl -s -H "Authorization: Bearer ***" "https://app.asana.com/api/1.0/tags?workspace=77904846009970"` (returns all tags, filter by name — the `name=` query param doesn't filter server-side, it returns the full list)
 - Asana skill: `~/ADTools/skills/asana-task-manager/asana-task-manager.sh add-tag/remove-tag --task-gid <gid> --tag-gid <gid>`
 
+## Lessons learned — Docs-only QA
+
+**For docs-only tasks (no code build):**
+- `git log --oneline main..HEAD` shows commits to verify; >= 3 commits is typical for multi-file doc fixes
+- `git show <commit-sha>` diff shows **exactly** what was fixed — use this as your acceptance criteria checklist
+- Verify 5+ file modifications by checking git stat; read each modified file to spot-check the fixes
+- API naming changes (categorize→classify) appear in multiple locations; search broadly (all scope docs, not just one)
+- Decision supersedures (F4) are marked explicitly with **SUPERSEDED** tags; check for these in decision docs
+- Stale references live in decision documents alongside current decisions; both old and new may coexist — make sure the OLD reference is updated to the NEW one
+- Gateway docs often clarify implementation choices (Network.framework vs Vapor); look for DECISION CLARIFICATION sections
+- Model manifests include example notes; these are often added as NOTEs mid-section, not always at the top

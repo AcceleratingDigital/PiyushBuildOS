@@ -39,6 +39,54 @@ When Piyush is away from the interactive desktop session, a cron job (`d883a2abf
 - Commit to main
 - Touch hos-monorepo or hos-dev
 - Modify shared files (COORDINATION.md, SKILL_MANIFEST, site/, etc.)
+- Edit Swift/source files or write code — that's the coder agent's job, ALWAYS
+
+## Role Boundary GUARDRAIL
+
+The requirements agent writes specs, scope docs, decisions, and process docs. It does NOT implement code. Even when the exact technical fix is known (e.g., "convert unsafeSQL to PostgresQuery interpolation"), that goes in the scope doc / Asana task notes as technical guidance for the coder — not as a code edit. The requirements agent works in `~/code/hos-requirements` only (plus Asana notes + feature branches for scope docs).
+
+## V1 Rebaseline (2026-08-18)
+
+A 4-agent parallel review (competitive analysis, usability, feature gap, product vision) assessed hOS against the "impressive" bar for first-wave testers. Full report: `docs/v1-rebaseline.md` on the requirements branch.
+
+**Key finding:** The hardest engineering is done. What's missing is last-mile UX work that makes capabilities visible and felt. The product is chat-first (reactive) when the vision is queue-first (proactive).
+
+**V1 scope (39 items across 4 tiers):**
+- Tier 0 (10 demo blockers): push brief, approval cards on iPhone, prepared actions in brief, fix APNs, kid surface, member switcher, plain-language approvals, audit on iPhone, whitelist growth, finance anomaly push
+- Tier 1 (10 missing obvious features): weather, grocery list, smart home (HomeKit), family location, package tracking, birthdays, news digest, weather-aware suggestions, media control, homework tutor
+- Tier 2 (10 shallow features to deepen): finance budgeting, meal plan loop, messages compose, notes unification, brief consolidation, chore gamification, chrome history intelligence, contacts relationships, document chain, spotlight semantic search
+- Tier 3 (9 UX polish): GUI setup wizard, family dashboard, suggested prompts, member switcher, activity summary, rules surface, error states, privacy indicator, evening summary
+
+**Requirements agent job:** Write specs for V1 items in build-plan order. Full build plan: `docs/v1-build-plan.md`. Start with Phase A (demo blockers) — they have no dependencies and unblock everything else.
+
+**Phase A (spec first, build first):**
+1. A1: Verify CKSubscription push on real devices (S — code already built)
+2. A2: Push-delivered morning brief (M — depends on A1)
+3. A3: Approval cards on iPhone with 4-option F2 flow (M — depends on A1)
+4. A4: Plain-language approvals (S — depends on A3)
+5. A5: Prepared actions in brief as tappable cards (M — depends on A2+A3)
+6. A6: Member switcher in iOS (S)
+7. A7: Voice input — push-to-talk via Apple Speech (M)
+8. A8: Brief consolidation — merge 3 skills into 1 composable system (M)
+
+Spec each item: WHAT/HOW/Build Readiness in ASANA TASK NOTES (not just on branch), feature branch, tag status-ready-to-build. Follow 5-step handoff. The spec MUST be in Asana notes — the build coordinator reads Asana notes, NOT branch files. A scope doc on a branch without the spec in Asana notes is an INCOMPLETE handoff. See docs/decisions/f2-approval-ux-update.md for F2 4-option flow details.
+
+**V1 Decisions (final):**
+- Voice input → V1 (push-to-talk, Apple Speech framework)
+- Smart home → V2 (deferred entirely)
+- Push → CKSubscription already implemented (verify on real devices)
+- Brief → consolidate 3 into 1 composable system
+- Kid surface → role-gated view in existing companion app
+
+A dual-agent review found 39 findings (8 CRITICAL, 14 MAJOR, 10 MINOR, 7 INFO). Full report: `docs/reviews/cross-model-review-2026-08-17.md` on the requirements branch. 6 remediation tasks were created from this review and queued for build. Key decisions captured:
+- F2 trust model: whitelist from day 1, approval → autonomy upgrade
+- Shared capabilities: retrofit all skills before beta
+- FoundationModels: fix with real async API before beta
+- Approval timeout: remove entirely (let user approve at their pace)
+- SkillKit: add missing domains (.notes, .reminders, .journal)
+- Security: SQL injection fix (unsafeSQL → interpolated PostgresQuery) + delete AutonomyEngine dead code
+
+The requirements agent should reference the review findings when writing future specs to avoid reintroducing flagged patterns. Retroactive scope docs (19) were written for all shipped features — these serve as the baseline for v2 enhancement work.
 
 **Telegram communication:**
 - All cron messages prefixed `[REQ]` to distinguish from build coordinator (`e4b0b407e0fb`) and drift audit (`fbe086d5b979`)

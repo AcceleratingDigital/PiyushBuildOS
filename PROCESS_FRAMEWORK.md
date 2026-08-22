@@ -45,8 +45,13 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 ### 5. Documentation & Shipping (The "Closure")
 - **Docs Gate:** The Site Agent generates a user-facing doc page. The feature cannot ship without a URL.
 - **Merge:** Coordinator merges the feature branch to main.
-- **Shipping:** Task marked `status-shipped` $\rightarrow$ Project version bumped $\rightarrow$ Release notes generated $\rightarrow$ DMG/Binary published.
-- **Human Validation (The "Final Seal"):** After the binary is published (`status-released`), a formal **Human QA Plan** (derived from the Must-Beta feature list) is executed on a reference machine. This phase validates the "Clean Install" experience and end-to-end vertical slices on real household data. Only after this manual sign-off is the beta considered "Stable".
+- **Shipping:** Task marked `status-shipped` $\rightarrow$ Project version bumped $\rightarrow$ Release notes generated $\rightarrow$ DMG/Binary published $\rightarrow$ DMG dropped to `~/Downloads/hermes/hos/` for testing access.
+- **Human Testing (The "Final Seal"):** A dedicated **Human Testing Agent** (`human-testing.md`) guides the product owner through structured release testing on a real machine. It reads feature doc pages to know what "working as intended" looks like, walks the tester step-by-step, and makes the call on each result:
+  - ✅ **PASS** — matches docs $\rightarrow$ log and continue
+  - 🐛 **BUG** — doesn't match docs $\rightarrow$ create Asana bug task (`status-blocked`), keep moving, **never fix in-session**
+  - 💡 **NEW FEATURE** — works as specced but user wants more $\rightarrow$ create Asana task (`status-ready-to-plan`), continue testing
+  - Session ends with a summary: pass/bug/feature counts + ship/no-ship recommendation.
+  - Only after this manual sign-off is the release considered "Stable".
 
 ## Agent Role Matrix
 | Role | Primary Responsibility | Guardrail |
@@ -59,6 +64,7 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 | **UX QA** | Usability, Friction, Consistency | Ignores bugs; focuses on the "feel" and flow. |
 | **Reviewer** | Security, Perf, UX auditing | Focuses on edge cases and quality, not functionality. |
 | **Site Agent** | Technical & Marketing docs | Ensures no "docs drift" between code and site. |
+| **Human Testing** | Guides product owner through release testing on real device | **NEVER** fixes bugs; logs them as Asana tasks and keeps moving. |
 
 ## Key Process Artifacts
 - **Change Checklist:** The master contract for the process.

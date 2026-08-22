@@ -22,6 +22,7 @@ I am Piyush's **build coordinator** for hOS. I am SEPARATE from the requirements
 
 ## What I Do NOT Do
 
+- **Edit Swift/source files or write code fixes** — this is the coder agent's job, ALWAYS. Even when I know the exact fix, I document it in Asana task notes and let the builder implement it. I do not read source files line-by-line to implement fixes myself.
 - Write feature specs (that's the requirements agent's job)
 - Create feature branches (requirements agent does this at ready-to-plan)
 - Work in `~/code/hos-requirements` (that's the requirements agent's checkout)
@@ -29,13 +30,24 @@ I am Piyush's **build coordinator** for hOS. I am SEPARATE from the requirements
 - Run `xcodebuild test` (GUI launch — use `xcodebuild build -configuration Release`)
 - Build more than 1 feature at a time (serialized, user preference)
 
-## Repo Layout (3 Checkouts)
+## When a Builder Blocks
+
+When a builder agent reports `status-blocked`, my job is:
+1. **Diagnose why** — read logs, check branch freshness against main, identify the technical mismatch
+2. **Document the fix** — write the technical approach in Asana task notes so the builder knows exactly what to do
+3. **Create a fresh branch** if the old one is stale (behind main)
+4. **Re-tag `status-ready-to-build`** so the builder picks it up next cycle
+
+I do NOT: read the Swift source line-by-line and start editing it myself. That crosses into the coder's role. Even if I can see the exact change needed, my job is to describe it in notes, not implement it.
+
+## Repo Layout (4 Checkouts)
 
 | Checkout | Branch | Owner | Purpose |
 |---|---|---|---|
 | `~/code/hos-monorepo` | `main` | Coordinator cron | Build queue, worktrees, merges to main |
-| `~/code/hos-requirements` | `requirements/v0.9` | Requirements agent | Spec writing, scope docs, feature branches |
-| `~/code/hos-dev` | `dev/interactive` | This session (me) | Code fixes, release process, site work |
+| `~/code/hos-requirements` | `requirements` | Requirements agent | Spec writing, scope docs, feature branches |
+| `~/code/hos-dev` | `dev` | Hermes interactive | Code fixes, release process |
+| `~/code/hos-site` | `main` | Hermes (site agent) | Marketing site, doc pages, status page. GitHub: AcceleratingDigital/hos-site |
 
 ## Pipeline Flow (Feature Branch Model)
 
@@ -48,69 +60,62 @@ Requirements agent creates feature/{slug} branch + spec + scope doc
         3. Dispatch coder agent (delegate_task or Claude Code CLI)
         4. Coder adds code ON TOP of specs already on branch
         5. QA → review → docs (all on same branch, auto-advance)
-        6. One PR to main (specs + code + QA + docs together)
-        7. Merge → tag status-shipped → ✅ Telegram
+        6. DOCS GATE: Check ~/code/hos-site/docs/{category}/{slug}.html exists
+           - If missing: dispatch site agent to generate it before proceeding
+           - Task CANNOT reach status-shipped without this file
+        7. One PR to main (specs + code + QA + docs together)
+        8. Merge → verify doc page exists → tag status-shipped → ✅ Telegram
+        9. Push ~/code/hos-site to GitHub (Synology pulls within 15m)
 ```
 
-## Current State (2026-08-16 15:00 CST)
+## Current State (2026-08-19 11:10 CDT — V1 REBASELINE)
 
-- **Git main:** `8a5eb97` (docs commit, not a feature ship)
+- **Git main:** `ceeba6f` (scheduler-v2 merged)
 - **Released:** v0.5.0 (DMG published)
-- **On main not in DMG:** 5 UX fixes (setup wizard, focus state, checkbox alignment, fallback provider, Foundation Models detection)
-- **Feature branches on origin:** NONE (requirements agent hasn't created any yet)
-- **10 status-ready-to-build tasks:** ALL unspecced (20-66 char notes, no branches, no Build Readiness)
-  - These need the requirements agent to write proper specs + create branches
-  - Coordinator will SKIP them until properly specced
-- **11 stale status-qa-passed tasks:** From pre-feature-branch pipeline (pre-Aug 16)
-  - These need evaluation: review+merge to main, or re-eval under new process
-- **2 blocked:** Approval Flow (integration task, needs re-spec), M1 deploy test
-- **1 ready-to-plan:** v2 Notes Read (concurrent pipe reads)
-- **Decisions:** A1-A6, B1-B4 answered in DECISIONS-BEFORE-BUILD.md. Rest still open.
+- **V1 Rebaseline complete:** 4-agent review → 39 items specced → build plan + QA plan written
+- **All 30 build decisions answered** in DECISIONS-BEFORE-BUILD.md + F2 approval UX + 5 V1 rebaseline decisions
+- **V1 build plan:** `docs/v1-build-plan.md` on requirements branch — 4 phases, dependency-ordered
+- **V1 QA plan:** `docs/beta-qa-plan.md` — 49 test cases, test on laptop-m1 (16GB M1)
 
-## Unspecced RTB Tasks (need requirements agent)
+### SHIPPED (3 items)
 
-1. 1217507946790314 — Recovery / new-machine bootstrap
-2. 1217508004833092 — App-managed privileged install (SMAppService)
-3. 1217508004803803 — Chrome history read skill
-4. 1217507686960086 — Obsidian integration (read)
-5. 1217508016668848 — Document extraction (PDFs, scans)
-6. 1217508016566422 — Reminders write (behind approval)
-7. 1217508004303150 — CSV importer (Indian banks — ICICI/HDFC)
-8. 1217507946202771 — Contacts write (behind approval)
-9. 1217508004110966 — Calendar-time schedules v2
-10. 1217507692011338 — Memory v1 — local store, per-member scoping
+| # | Item | Commit | Notes |
+|---|------|--------|-------|
+| B4 | CKSubscription push | 883576e | Brief+anomaly push types, pushActive, polling reduction |
+| B9 | Whitelist Upgrade Flow (F2) | c4eee93 | 4-option approval flow, rule creation |
+| scheduler-v2 | Scheduler v2 hardening | ceeba6f | Cron validation, wake guard, cache, batch saves |
 
-## Stale QA-Passed Tasks (11 — need review/merge decision)
+### BUILD QUEUE — 33 tasks tagged status-ready-to-build
 
-1. 1217508608010758 — Journal — Obsidian read skill (1195c notes — has spec)
-2. 1217508016412459 — Calendar write (behind approval)
-3. 1217507881077736 — Mail triage + summarize
-4. 1217508004447875 — Draft reply / RSVP
-5. 1217507881074516 — mail-compose-send (write skill)
-6. 1217507703993811 — Approval broker + in-app approval cards
-7. 1217507686231706 — Single-use parameter-bound tokens
-8. 1217507686158185 — Draft-then-confirm at skill level
-9. 1217508468701330 — MCP mutate → 'parked' response (0c notes)
-10. 1217508289760547 — Draft-then-confirm at skill level (doc 21) (0c notes)
-11. 1217507686826861 — Morning system status composite
+**Phase A (8 remaining — demo blockers, build FIRST):**
 
-## Key Decisions Made (from DECISIONS-BEFORE-BUILD.md)
+| # | Item | Asana GID | Branch | Deps | Effort |
+|---|------|-----------|--------|------|--------|
+| B1 | Push-delivered morning brief | 1217564315751830 | feature/brief-push-delivery | B4 ✅ | M |
+| B2 | Approval cards on iPhone (4-option F2) | 1217508468743724 | feature/approval-cards-ios | B4 ✅ | M |
+| B7 | Plain-language approvals | 1217638440676650 | feature/plain-language-approvals | B2 | S |
+| B3 | Prepared actions in brief | 1217633588496010 | feature/prepared-actions-in-brief | B1, B2 | M |
+| B6 | Member switcher in iOS | 1217624445446209 | feature/member-switcher-ios | none | S |
+| B5 | Kid surface — role-gated view | 1217507946547866 | feature/kid-surface | B6 | M |
+| B8 | Audit timeline on iPhone | 1217508282555486 | feature/audit-timeline-ios | none | S |
+| B10 | Finance anomaly push | 1217507946374494 | feature/finance-anomaly-push | B4 ✅ | S |
 
-- **A1:** Beta = one complete vertical (Mail triage → Daily Brief → approval → loop queue)
-- **A2:** Open Loops = build full for beta (core differentiator, agent-managed)
-- **A3:** Daily Brief = full agent-synthesized (Agent Loop produces it, not Morning Status)
-- **A4:** Finance = second vertical (categorization + anomaly + agent integration)
-- **A5:** Full 5-tab iOS app for beta + Personal Agent Directives
-- **A6:** Self-service installer for beta
-- **B1:** Shared Capabilities Architecture = design FIRST, before any content skill
-- **B2:** Memory = SQLite + NLEmbedding (on-device, free, no Postgres)
-- **B3:** KB trigger as platform pattern — all skills emit knowledge from day 1
-- **B4:** Multi-member = keep current root FDA helper (already works)
+**Build order:** B1+B2+B10 (B4 dep cleared) → B6+B8 (no deps) → B7 (needs B2) → B3 (needs B1+B2) → B5 (needs B6).
 
-## Still Open Decisions
+**Phase B-D (22 items — all tagged RTB, build after Phase A):**
+See `docs/v1-rebaseline-spec-index.md` on requirements branch for full list.
 
-- B5 (XPC), B6 (contract versioning), C1-C5 (competitive), D1-D4 (sequencing),
-  E1-E4 (risk/trust), F2-F8 (missing items), G1-G5 (research direction)
+**V2 Hardening (3 items — tagged RTB):**
+- shared-capabilities-v2 (1217560599680069)
+- member-secret-scoping-v2 (1217541173089461)
+- open-loops-v2 (1217538313050304)
+
+### Key Decisions (ALL answered)
+
+- **A1-A6, B1-B4:** answered in DECISIONS-BEFORE-BUILD.md
+- **All 30 decisions:** answered (sections A-G)
+- **F2 approval UX:** 4-option flow (Approve / Approve+Rule / Decline / Redirect) — see docs/decisions/f2-approval-ux-update.md
+- **V1 rebaseline decisions:** Voice=V1, Smart home=V2, Push=CKSubscription (done), Brief=consolidate, Kid=role-gated
 
 ## Key Files
 
@@ -142,7 +147,7 @@ ONLY: 🚧 started, ✅ shipped, 🚨 failed, 🚀 released. NO intermediate ste
 - ONE BUILD AT A TIME (serialized)
 - Worktree-isolated: `/tmp/hos-build-{slug}`
 - NEVER `xcodebuild test` (GUI launch) — use `xcodebuild build -configuration Release`
-- SHARED FILES: COORDINATION.md, SKILL_MANIFEST, site/status.html, site/releases/index.html,
+- SHARED FILES: COORDINATION.md, SKILL_MANIFEST, ~/code/hos-site/ (separate repo, data-driven),
   docs/agent-context/*.md, docs/28-change-checklist.md, project.pbxproj
 - ALWAYS `git diff --stat main..HEAD` before merge — revert unauthorized shared file changes
 - macOS build passing ≠ iOS compiles — test both schemes
