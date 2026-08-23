@@ -1,7 +1,7 @@
-# hOS Build Coordinator — Agent Context
+# hOS BuildProcessCoordinator — Agent Context
 
 > **Last updated:** 2026-08-16 15:00 CST
-> **Purpose:** Persistent context for the build coordinator agent (this Hermes session).
+> **Purpose:** Persistent context for the BuildProcessCoordinator agent (this Hermes session).
 > If this session crashes or restarts, read this file + the handoff doc + memory to recover.
 
 > **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
@@ -13,7 +13,7 @@
 
 ## My Role
 
-I am Piyush's **build coordinator** for hOS. I am SEPARATE from the requirements agent
+I am Piyush's **BuildProcessCoordinator** for hOS. I am SEPARATE from the requirements agent
 (which Piyush is setting up in a different session). My responsibilities:
 
 1. **Manage the coordinator cron** (`e4b0b407e0fb`, every 10m → telegram:8283210299)
@@ -51,7 +51,7 @@ I do NOT: read the Swift source line-by-line and start editing it myself. That c
 
 | Checkout | Branch | Owner | Purpose |
 |---|---|---|---|
-| `~/code/hos-monorepo` | `main` | Coordinator cron | Build queue, worktrees, merges to main |
+| `~/code/hos-monorepo` | `main` | BuildProcessCoordinator cron | Build queue, worktrees, merges to main |
 | `~/code/hos-requirements` | `requirements` | Requirements agent | Spec writing, scope docs, feature branches |
 | `~/code/hos-dev` | `dev` | Hermes interactive | Code fixes, release process |
 | `~/code/hos-site` | `main` | Hermes (site agent) | Marketing site, doc pages, status page. GitHub: AcceleratingDigital/hos-site |
@@ -61,7 +61,7 @@ I do NOT: read the Swift source line-by-line and start editing it myself. That c
 ```
 Requirements agent creates feature/{slug} branch + spec + scope doc
     → tags status-ready-to-build (LAST step, after specs committed)
-    → Coordinator picks up:
+    → BuildProcessCoordinator picks up:
         1. Read branch name from Asana notes
         2. git worktree add /tmp/hos-build-{slug} feature/{slug}
         3. Dispatch coder agent (delegate_task or Claude Code CLI)

@@ -10,7 +10,7 @@ The fundamental rule of this process is that every piece of information has exac
 
 ## The 4-Checkout Layout (Role Isolation)
 To prevent "context pollution" and accidental edits, different agents work in isolated checkouts:
-1. **Monorepo/Coordinator:** (Main branch) Only the Coordinator agent commits here. Handles merges, worktrees, and final releases.
+1. **Monorepo/BuildProcessCoordinator:** (Main branch) Only the BuildProcessCoordinator agent commits here. Handles merges, worktrees, and final releases.
 2. **Requirements:** (Requirements branch) Where the Requirements Agent + Human design specs and create feature branches.
 3. **Dev/Interactive:** (Dev branch) For rapid prototyping, one-off fixes, and interactive sessions.
 4. **Site:** (Standalone repo) Dedicated to documentation and marketing.
@@ -32,7 +32,7 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 - **Handoff:** Branch name is added to the PM task notes $\rightarrow$ Task tagged `status-ready-to-build`.
 
 ### 3. Build & Implementation (The "Execution")
-- **Coordinator Pickup:** Coordinator reads the branch name $\rightarrow$ creates a git worktree $\rightarrow$ dispatches a Coder agent.
+- **BuildProcessCoordinator Pickup:** BuildProcessCoordinator reads the branch name $\rightarrow$ creates a git worktree $\rightarrow$ dispatches a Coder agent.
 - **Coder Agent:** Implements the feature on the feature branch.
 - **Verification:** Coder updates `STATE.md` and `PLAN.md` $\rightarrow$ tags `status-ready-for-qa`.
 
@@ -44,7 +44,7 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 
 ### 5. Documentation & Shipping (The "Closure")
 - **Docs Gate:** The Site Agent generates a user-facing doc page. The feature cannot ship without a URL.
-- **Merge:** Coordinator merges the feature branch to main.
+- **Merge:** BuildProcessCoordinator merges the feature branch to main.
 - **Shipping:** Task marked `status-shipped` $\rightarrow$ Project version bumped $\rightarrow$ Release notes generated $\rightarrow$ DMG/Binary published $\rightarrow$ DMG dropped to `~/Downloads/hermes/hos/` for testing access.
 - **Human Testing (The "Final Seal"):** A dedicated **Human Testing Agent** (`human-testing.md`) guides the product owner through structured release testing on a real machine. It reads feature doc pages to know what "working as intended" looks like, walks the tester step-by-step, and makes the call on each result:
   - ✅ **PASS** — matches docs $\rightarrow$ log and continue
@@ -56,7 +56,7 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 ## Agent Role Matrix
 | Role | Primary Responsibility | Guardrail |
 |---|---|---|
-| **Coordinator** | Triage, Dispatch, Merge, Release | **NEVER** writes source code. |
+| **BuildProcessCoordinator** | Triage, Dispatch, Merge, Release | **NEVER** writes source code. |
 | **Requirements** | Research, Spec writing, Branching | Focuses on "What" and "How" (not implementation). |
 | **UX Designer** | User Journeys, Layouts, Micro-copy | Focuses on interaction intent, not implementation. |
 | **Coder** | Implementation, Unit Tests | Works only on assigned feature branches. |
@@ -109,4 +109,4 @@ shared file wins for shared state and process rules.
 - **Decisions Log:** A record of all "blocking" architectural decisions to avoid re-litigating.
 - **Agent Context Files:** Specialized instructions (system prompts) for each role.
 - **Shared Context File:** Cross-cutting state read by ALL agents at session start.
-- **Build Readiness Metadata:** Essential data (Risk/Scope) used by the Coordinator to serialize builds.
+- **Build Readiness Metadata:** Essential data (Risk/Scope) used by the BuildProcessCoordinator to serialize builds.

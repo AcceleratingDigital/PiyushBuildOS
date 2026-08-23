@@ -76,7 +76,7 @@ A 4-agent parallel review (competitive analysis, usability, feature gap, product
 7. A7: Voice input — push-to-talk via Apple Speech (M)
 8. A8: Brief consolidation — merge 3 skills into 1 composable system (M)
 
-Spec each item: WHAT/HOW/Build Readiness in ASANA TASK NOTES (not just on branch), feature branch, tag status-ready-to-build. Follow 5-step handoff. The spec MUST be in Asana notes — the build coordinator reads Asana notes, NOT branch files. A scope doc on a branch without the spec in Asana notes is an INCOMPLETE handoff. See docs/decisions/f2-approval-ux-update.md for F2 4-option flow details.
+Spec each item: WHAT/HOW/Build Readiness in ASANA TASK NOTES (not just on branch), feature branch, tag status-ready-to-build. Follow 5-step handoff. The spec MUST be in Asana notes — the BuildProcessCoordinator reads Asana notes, NOT branch files. A scope doc on a branch without the spec in Asana notes is an INCOMPLETE handoff. See docs/decisions/f2-approval-ux-update.md for F2 4-option flow details.
 
 **V1 Decisions (final):**
 - Voice input → V1 (push-to-talk, Apple Speech framework)
@@ -96,7 +96,7 @@ A dual-agent review found 39 findings (8 CRITICAL, 14 MAJOR, 10 MINOR, 7 INFO). 
 The requirements agent should reference the review findings when writing future specs to avoid reintroducing flagged patterns. Retroactive scope docs (19) were written for all shipped features — these serve as the baseline for v2 enhancement work.
 
 **Telegram communication:**
-- All cron messages prefixed `[REQ]` to distinguish from build coordinator (`e4b0b407e0fb`) and drift audit (`fbe086d5b979`)
+- All cron messages prefixed `[REQ]` to distinguish from BuildProcessCoordinator (`e4b0b407e0fb`) and drift audit (`fbe086d5b979`)
 - Cron only messages for: decisions needing input, specs ready for review, errors/blockers
 - Routine progress is silent (no message)
 - Piyush replies to decisions when back at a session, or the next cron run picks up state file changes
@@ -127,7 +127,7 @@ The requirements agent should reference the review findings when writing future 
 
 | Checkout | Branch | Owner | Purpose |
 |---|---|---|---|
-| `~/code/hos-monorepo` | `main` | Coordinator cron | Build queue, worktrees, merges to main. **I DO NOT TOUCH THIS.** |
+| `~/code/hos-monorepo` | `main` | BuildProcessCoordinator cron | Build queue, worktrees, merges to main. **I DO NOT TOUCH THIS.** |
 | `~/code/hos-requirements` | `requirements` | **ME + Piyush** | Spec writing, scope docs, pre-plan research, process docs, decisions, context library |
 | `~/code/hos-dev` | `dev` | Hermes interactive | Code fixes, release process, site work |
 
@@ -160,11 +160,11 @@ Stage 3: Ready-to-Build (The Trigger — LAST step)
     ✅ Branch pushed to origin
     ✅ Branch name in task notes
     ✅ Reviewed spec for completeness
-  → The tag IS the trigger. Coordinator polls every 10 min, sees tag, reads branch,
+  → The tag IS the trigger. BuildProcessCoordinator polls every 10 min, sees tag, reads branch,
     creates worktree, builds on top of my specs.
 
-Stage 4: Build → QA → Review → Ship (Coordinator handles)
-  → I'm done once I tag ready-to-build. Coordinator owns the rest.
+Stage 4: Build → QA → Review → Ship (BuildProcessCoordinator handles)
+  → I'm done once I tag ready-to-build. BuildProcessCoordinator owns the rest.
 ```
 
 ## Spec Format (Required)
@@ -288,7 +288,7 @@ source ~/ADTools/config/secrets.conf && export ASANA_TOKEN ASANA_WORKSPACE_GID
 | status-released tag | 1217510620734371 |
 | Admin Surface parent | 1217507687105731 |
 | Credential Vault parent | 1217507686230986 |
-| Coordinator cron | e4b0b407e0fb |
+| BuildProcessCoordinator cron | e4b0b407e0fb |
 | Daily drift audit cron | fbe086d5b979 |
 
 ## Task Model (3 types)
@@ -319,7 +319,7 @@ source ~/ADTools/config/secrets.conf && export ASANA_TOKEN ASANA_WORKSPACE_GID
 - **Secrets:** `~/ADTools/config/secrets.conf`
 - **Bootstrap doc:** `~/Downloads/hos-requirements-agent-bootstrap.md` (full session bootstrap)
 
-## Coordinator (Build Agent) — How We Interact
+## BuildProcessCoordinator (Build Agent) — How We Interact
 
 - **Cron:** `e4b0b407e0fb` (every 10 min → telegram:8283210299)
 - **Checkout:** `~/code/hos-monorepo` (main) — I don't touch it

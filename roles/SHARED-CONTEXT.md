@@ -44,10 +44,10 @@ isn't tagged `status-shipped`, the board is lying.
 
 | Channel | Who uses it | Purpose |
 |---|---|---|
-| **Slack: #piyush-mm4p-buildprocess** | Coordinator + Piyush | Build status, release alerts, process commands from Piyush |
+| **Slack: #piyush-mm4p-buildprocess** | BuildProcessCoordinator + Piyush | Build status, release alerts, process commands from Piyush |
 | **Telegram** | Requirements agent | Requirements agent updates (delta-only, silent when nothing moved) |
 | **Asana task notes** | ALL agents | Persistent handoff data — specs, diagnostics, branch names, build notes |
-| **COORDINATION.md** | Coordinator | Append-only build log (baton handoffs, stall detection) |
+| **COORDINATION.md** | BuildProcessCoordinator | Append-only build log (baton handoffs, stall detection) |
 
 ### Communication rules
 
@@ -60,7 +60,7 @@ isn't tagged `status-shipped`, the board is lying.
 
 | Session | Surface | Context File |
 |---|---|---|
-| **GUI (Hermes desktop)** | This chat | `build-coordinator.md` + this shared file |
+| **GUI (Hermes desktop)** | This chat | `build-process-coordinator.md` + this shared file |
 | **Slack (#piyush-mm4p-buildprocess)** | Slack channel | Same context files — the coordinator agent reads them regardless of which surface the command came from |
 
 Both sessions share the same agent context files, Asana project, and git repos.
@@ -70,7 +70,7 @@ A command from Slack and a command from the GUI have equal authority.
 
 | Checkout | Branch | Who Works Here |
 |---|---|---|
-| `~/code/hos-monorepo` | main | Coordinator ONLY (builds in worktrees) |
+| `~/code/hos-monorepo` | main | BuildProcessCoordinator ONLY (builds in worktrees) |
 | `~/code/hos-requirements` | requirements | Requirements agent + Piyush |
 | `~/code/hos-dev` | dev | Hermes interactive sessions (code fixes, release process) |
 | `~/code/hos-site` | main | Site agent (marketing site, doc pages, downloads) |
@@ -81,7 +81,7 @@ A command from Slack and a command from the GUI have equal authority.
 
 ### Status tags (pickup signals)
 - `status-ready-to-plan` → Requirements agent picks up
-- `status-ready-to-build` → Coordinator picks up (branch name MUST be in notes)
+- `status-ready-to-build` → BuildProcessCoordinator picks up (branch name MUST be in notes)
 - `status-in-progress` → Active build (coordinator tracking)
 - `status-ready-for-qa` → QA agent picks up
 - `status-qa-passed` → Reviewer picks up
@@ -106,7 +106,7 @@ A command from Slack and a command from the GUI have equal authority.
 
 | Role | CLI Tool | Primary Model | Escalation |
 |---|---|---|---|
-| Coordinator | Hermes (this session) | `algolia/xlarge` | `claude-sonnet-4-6` |
+| BuildProcessCoordinator | Hermes (this session) | `algolia/xlarge` | `claude-sonnet-4-6` |
 | Requirements | Hermes (cron d883a2abf8d5) | `algolia/xlarge` | `claude-sonnet-4-6` |
 | Coder | `claude` CLI | `algolia/xlarge` via LiteLLM | `claude-sonnet-4-6` |
 | QA | `opencode` CLI | `algolia/medium` | `algolia/xlarge` |
@@ -131,7 +131,7 @@ status-ready-to-build → status-in-progress → status-ready-for-qa → status-
 → status-released (FINAL)
 ```
 
-**Mandatory post-release step:** Coordinator MUST sync ALL tasks in that release
+**Mandatory post-release step:** BuildProcessCoordinator MUST sync ALL tasks in that release
 from `status-shipped` → `status-released`. This is not optional. If tasks remain
 at `status-shipped` after a DMG is published, the Asana board is lying to Piyush.
 

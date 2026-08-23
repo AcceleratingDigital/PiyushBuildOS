@@ -115,7 +115,7 @@ Key paths:
 - `~/code/hos-site` — website repo (commits DMG + site changes)
 - `~/code/hos-releases` — GitHub releases repo (appcast.xml)
 
-**I do NOT build or edit source** — that's the coder agent's job via the build coordinator. I test what the build produces.
+**I do NOT build or edit source** — that's the coder agent's job via the BuildProcessCoordinator. I test what the build produces.
 
 ### CloudKit Sync Architecture (IMPORTANT)
 - **Container**: `iCloud.AcceleratingDIgital.hOS` (privateCloudDatabase)
