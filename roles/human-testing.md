@@ -62,9 +62,10 @@ Before the testing session begins, I need:
 ## Environment — What's Installed and Where
 
 ### Mac Server
-- **Build machine**: mm4p (this machine, USA-MM4P-PP) — Xcode builds, notarization, packaging
+- **Build machine**: mm4p (this machine, USA-MM4P-PP) — Xcode builds, notarization, packaging. Build agents use this. NOT for human testing.
 - **Primary test machine**: laptop-m1 (100.73.108.122 via Tailscale) — clean
   install from public DMG, NOT a dev build. This is where it MUST work.
+  Human testing happens here. Piyush has screen share for UI, agent has SSH for logs.
 - **Secondary test machines**: sharedminiintel (100.66.103.40), algo-laptop
 - **Public download**: `https://acceleratingdigital.com/hos/downloads/hOS-Server.dmg`
 - **GitHub release**: `https://github.com/AcceleratingDigital/hos-releases/releases`
@@ -471,9 +472,13 @@ v0.6.4 build in progress for re-testing.
 - iPhone/iPad connect via CloudKit (not LAN) using same iCloud account
 - LLM endpoint works fine (initial empty-API-key diagnosis was wrong)
 
-**Testing status (as of 2026-08-22):**
-- Mac Server: v0.6.3 running on mm4p (build machine, also primary test for fast iteration)
-- iOS Companion v0.6.1: installed via TestFlight on iPhone
-- v0.6.4 build in progress — will include all 18 bug fixes, ready for re-testing
-- laptop-m1: v0.6.1, not running — will get v0.6.4 for clean-machine validation
-- Next: re-test all 18 fixed bugs on v0.6.4
+**Testing status (as of 2026-08-23):**
+- Mac Server: v0.6.3 running on mm4p — v0.6.4 and v0.6.5 BOTH CRASH
+- iOS Companion v0.6.5 on TestFlight — CRASHES ON LAUNCH (same CKContainer bug)
+- iPad app: Xcode template only, not functional, not impacted by crashes
+- TWO CRITICAL bugs blocking ALL testing:
+  - Bug 1217749232220364: CKContainer stored property crash — Mac v0.6.4 + iOS v0.6.5 (SYSTEMIC, 5+ unfixed iOS instances)
+  - Bug 1217749231385861: Postgres fire-and-forget → EXC_BAD_ACCESS — Mac v0.6.5 only
+- Both must be fixed in v0.6.6 before any re-testing can happen
+- laptop-m1: v0.6.1, not running — will get v0.6.6 for clean-machine validation
+- Next: wait for v0.6.6 build with both fixes, then re-test all 18 shipped bugs + new issues
