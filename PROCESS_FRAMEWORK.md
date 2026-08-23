@@ -74,7 +74,7 @@ The product owner interacts with the coordinator agent through **two equal surfa
 | Surface | Usage | Context |
 |---|---|---|
 | **GUI (Desktop App)** | Deep work, file inspection, visual tasks | Same context files |
-| **Slack (#piyush-mm4p-buildprocess)** | Quick commands, status checks, remote control | Same context files |
+| **Slack (#piyush-mm4p-hosbuildprocess)** | Quick commands, status checks, remote control | Same context files |
 
 Both sessions share the same agent context files, PM project, and git repos.
 A command from Slack and a command from the GUI have equal authority. The

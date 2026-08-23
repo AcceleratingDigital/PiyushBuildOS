@@ -44,7 +44,7 @@ isn't tagged `status-shipped`, the board is lying.
 
 | Channel | Who uses it | Purpose |
 |---|---|---|
-| **Slack: #piyush-mm4p-buildprocess** | BuildProcessCoordinator + Piyush | Build status, release alerts, process commands from Piyush |
+| **Slack: #piyush-mm4p-hosbuildprocess** | BuildProcessCoordinator + Piyush | Build status, release alerts, process commands from Piyush |
 | **Telegram** | Requirements agent | Requirements agent updates (delta-only, silent when nothing moved) |
 | **Asana task notes** | ALL agents | Persistent handoff data — specs, diagnostics, branch names, build notes |
 | **COORDINATION.md** | BuildProcessCoordinator | Append-only build log (baton handoffs, stall detection) |
