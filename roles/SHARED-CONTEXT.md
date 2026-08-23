@@ -126,10 +126,17 @@ A command from Slack and a command from the GUI have equal authority.
 ```
 status-ready-to-build → status-in-progress → status-ready-for-qa → status-qa-passed
 → status-docs-pending → status-docs-done → [RELEASE GATE]
-→ package-release.sh → publish-release.sh → DMG drop to ~/Downloads/hermes/hos/
-→ TestFlight upload (iPhone + iPad) → status-shipped → Human Testing
+→ bump version + package-release.sh + publish-release.sh
+→ DMG drop to ~/Downloads/hermes/hos/
+→ TestFlight upload (iPhone Companion + iPad — ALL platforms, every release)
+→ verify all builds VALID → status-shipped → Human Testing
 → status-released (FINAL)
 ```
+
+**Mandatory multi-platform rule:** EVERY release ships ALL apps — Mac DMG,
+iPhone Companion (TestFlight), and iPad "hOS Shared View" (TestFlight).
+Watch app ships embedded in the iPhone Companion. No platform is skipped.
+Release is not complete until all TestFlight builds reach VALID state.
 
 **Mandatory post-release step:** BuildProcessCoordinator MUST sync ALL tasks in that release
 from `status-shipped` → `status-released`. This is not optional. If tasks remain

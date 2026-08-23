@@ -45,7 +45,13 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 ### 5. Documentation & Shipping (The "Closure")
 - **Docs Gate:** The Site Agent generates a user-facing doc page. The feature cannot ship without a URL.
 - **Merge:** BuildProcessCoordinator merges the feature branch to main.
-- **Shipping:** Task marked `status-shipped` $\rightarrow$ Project version bumped $\rightarrow$ Release notes generated $\rightarrow$ DMG/Binary published $\rightarrow$ DMG dropped to `~/Downloads/hermes/hos/` for testing access.
+- **Shipping:** Task marked `status-shipped` → Project version bumped → Release notes generated → DMG/Binary published → DMG dropped to `~/Downloads/hermes/hos/` for testing access.
+- **Multi-Platform TestFlight (MANDATORY):** EVERY release ships ALL platforms — not just Mac:
+  - Mac Server DMG (notarized + published via `package-release.sh` + `publish-release.sh`)
+  - iPhone Companion (archive `hOS` scheme → TestFlight)
+  - iPad "hOS Shared View" (archive `hOSiPad` scheme → TestFlight)
+  - Watch app (embedded in iPhone Companion, no separate upload)
+  - Release is NOT complete until all TestFlight builds reach VALID state.
 - **Human Testing (The "Final Seal"):** A dedicated **Human Testing Agent** (`human-testing.md`) guides the product owner through structured release testing on a real machine. It reads feature doc pages to know what "working as intended" looks like, walks the tester step-by-step, and makes the call on each result:
   - ✅ **PASS** — matches docs $\rightarrow$ log and continue
   - 🐛 **BUG** — doesn't match docs $\rightarrow$ create Asana bug task (`status-blocked`), keep moving, **never fix in-session**
