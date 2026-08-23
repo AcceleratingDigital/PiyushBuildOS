@@ -100,6 +100,13 @@ See `docs/agent-context/coder.md` § "Quick reference: data source → fastest a
 - **Content truncation limits are reasonable** — 8000 chars (summarize/extract), 4000 chars (classify). Good context-budget hygiene.
 
 ## Semantic Memory Layer — Mail SQLite→Postgres migration (2026-08-17, commit 6615b97)
+> **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
+> Read it at session start before this file. It contains project identity,
+> S-S-D model, communication channels, repo layout, Asana tags, tool/model
+> matrix, release pipeline, concurrency guardrails, and known issues.
+> Update it when shared state changes; keep role-specific instructions here.
+
+
 
 - MailClassificationStore uses `PostgresQuery(unsafeSQL:)` with manual `esc()` (single-quote doubling) instead of parameterized binds — same anti-pattern noted in WhitelistStore. Negligible perf impact but unsafe and slightly slower (PostgresNIO can't cache prepared plans).
 - Single lazy PostgresConnection (id: 3) in the actor serializes ALL mail store ops — same pattern as MemoryStore (id: 2). Fine for beta single-owner; contention risk at scale. No connection pool.

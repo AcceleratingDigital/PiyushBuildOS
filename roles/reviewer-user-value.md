@@ -68,6 +68,13 @@ patterns, past feedback, and accessibility requirements.
 - iOS badge that is always-green with no per-response context is acceptable IF the architecture guarantees local processing (companion → household Mac server), but the info sheet should explain WHY it's always green, not just state it.
 
 ## B7 Plain-Language Approvals review (2026-08-19)
+> **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
+> Read it at session start before this file. It contains project identity,
+> S-S-D model, communication channels, repo layout, Asana tags, tool/model
+> matrix, release pipeline, concurrency guardrails, and known issues.
+> Update it when shared state changes; keep role-specific instructions here.
+
+
 
 - A renderer that accepts `params: [String: String]` but whose primary call site (CloudMailbox) passes `params: [:]` because PendingApproval doesn't store params is a CRITICAL user-value defect — every template with {recipient}/{title}/{date} produces broken strings with stripped placeholders. Always trace the full data flow from producer (PolicyCheckpoint) → carrier (PendingApproval struct) → consumer (renderer), not just the renderer's internal logic.
 - Parameter key mismatches between producer and template (e.g., PolicyCheckpoint passes `params: ["name": name]` but template uses `{title}`) silently produce empty interpolation even when params ARE passed. Canonical key names must be documented and enforced on both sides.

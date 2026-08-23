@@ -50,6 +50,13 @@ doc structure patterns, SKILL.md format, and code documentation conventions.
 | 2026-08-15 | JournalRead | SKILL.md | Created during build |
 
 ## Lessons (2026-08-17 — Approval Engine user docs)
+> **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
+> Read it at session start before this file. It contains project identity,
+> S-S-D model, communication channels, repo layout, Asana tags, tool/model
+> matrix, release pipeline, concurrency guardrails, and known issues.
+> Update it when shared state changes; keep role-specific instructions here.
+
+
 
 - User-facing architecture docs live in ~/code/hos-site/docs/architecture/*.html, styled with inline CSS tokens from _template.html (light + dark via prefers-color-scheme). No external stylesheet — each doc is self-contained.
 - Doc structure pattern: nav (brand→../../index.html, sibling doc links), h1, .lede (serif intro), h2 sections with border-top, .callout (ok/warn/accent variants), .steps (numbered ol), .fact-card with .fact-badge tags, .footer. Max-width 720px wrap.

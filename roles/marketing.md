@@ -95,6 +95,13 @@ Match `docs/skills/notes.html` structure:
 - Release published → update footer version, capability table
 
 ## Past work
+> **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
+> Read it at session start before this file. It contains project identity,
+> S-S-D model, communication channels, repo layout, Asana tags, tool/model
+> matrix, release pipeline, concurrency guardrails, and known issues.
+> Update it when shared state changes; keep role-specific instructions here.
+
+
 
 | Date | Page | Change |
 |---|---|---|

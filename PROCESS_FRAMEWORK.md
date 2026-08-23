@@ -66,8 +66,47 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 | **Site Agent** | Technical & Marketing docs | Ensures no "docs drift" between code and site. |
 | **Human Testing** | Guides product owner through release testing on real device | **NEVER** fixes bugs; logs them as Asana tasks and keeps moving. |
 
+## Communication & Session Model
+
+### Dual-Session Pattern
+The product owner interacts with the coordinator agent through **two equal surfaces**:
+
+| Surface | Usage | Context |
+|---|---|---|
+| **GUI (Desktop App)** | Deep work, file inspection, visual tasks | Same context files |
+| **Slack (#piyush-mm4p-buildprocess)** | Quick commands, status checks, remote control | Same context files |
+
+Both sessions share the same agent context files, PM project, and git repos.
+A command from Slack and a command from the GUI have equal authority. The
+coordinator agent reads the same context files regardless of which surface
+the command originated from.
+
+### Communication Rules
+- **Delta-only reporting:** Agents never report "no changes" or "everything is fine." Silence = healthy pipeline.
+- **Asana notes are the contract:** If it's not in Asana task notes, it didn't happen.
+- **Slack commands from Piyush** are equivalent to GUI chat commands.
+
+## Shared Agent Context
+ALL agents read `SHARED-CONTEXT.md` at session start before their role-specific
+file. It contains cross-cutting state that affects every role:
+
+- Project identity & current version
+- S-S-D model (what lives where)
+- Communication channels (Slack, Telegram, Asana, COORDINATION.md)
+- Repo layout (4 checkouts, stay in your lane)
+- Asana tag system (status, phase, agent tags with GIDs)
+- Tool & model matrix (which CLI, which model, which escalation path)
+- Release pipeline (full flow from ready-to-build → released)
+- Concurrency guardrails (baton pattern, lock files, lease-based statuses)
+- Known issues & technical debt
+
+**Individual role files** (`<role>.md`) build on top of the shared context.
+If a conflict exists, the role file wins for role-specific behavior; the
+shared file wins for shared state and process rules.
+
 ## Key Process Artifacts
 - **Change Checklist:** The master contract for the process.
 - **Decisions Log:** A record of all "blocking" architectural decisions to avoid re-litigating.
 - **Agent Context Files:** Specialized instructions (system prompts) for each role.
+- **Shared Context File:** Cross-cutting state read by ALL agents at session start.
 - **Build Readiness Metadata:** Essential data (Risk/Scope) used by the Coordinator to serialize builds.

@@ -79,6 +79,13 @@ patterns, past vulnerabilities found, and hOS-specific threats.
 - **CloudMailbox additive fields don't add new cross-member leak**: `plainLanguage` and `context` are derived from the same params already serialized as `detail` in the pre-existing outbox payload. No new leak surface, but the shared single-record outbox design means all members' approvals (with detail text) are in one CloudKit record — pre-existing, not B7's fault.
 
 ## B2 Approval Cards (iOS) review — 2026-08-19
+> **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
+> Read it at session start before this file. It contains project identity,
+> S-S-D model, communication channels, repo layout, Asana tags, tool/model
+> matrix, release pipeline, concurrency guardrails, and known issues.
+> Update it when shared state changes; keep role-specific instructions here.
+
+
 
 - **approveWithRule ordering**: `approve(id,...)` is called BEFORE the isOwner gate. A non-owner who passes `authorize()` (e.g. parent approving child action) gets the action approved even if rule creation is rejected. Not a bypass (action was approvable via standard Approve anyway), but the owner-gate should come first for clarity and to prevent surprise "action still approved" when the user intended rule creation.
 - **Redirect revised approval has no continuation**: `redirect()` appends `newItem` to `pending` but never registers `continuations[newItem.id]`. When the user later approves the revised card, `resolve()` finds nil continuation and silently drops it. The original skill already got `.denied`. Net: redirect is functionally broken (revised action never executes). Not a security hole (no unauthorized execution), but a correctness bug that makes the feature non-functional.

@@ -4,6 +4,13 @@
 > **Purpose:** Persistent context for the build coordinator agent (this Hermes session).
 > If this session crashes or restarts, read this file + the handoff doc + memory to recover.
 
+> **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
+> Read it at session start before this file. It contains project identity,
+> S-S-D model, communication channels, repo layout, Asana tags, tool/model
+> matrix, release pipeline, concurrency guardrails, and known issues.
+> Update it when shared state changes; keep role-specific instructions here.
+
+
 ## My Role
 
 I am Piyush's **build coordinator** for hOS. I am SEPARATE from the requirements agent

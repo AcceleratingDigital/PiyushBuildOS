@@ -176,6 +176,13 @@ ready-to-plan, with specs committed on the branch in `docs/scope/{slug}.md`.
     Use `-scheme "hOS Server"` to build the macOS server target.
 
 ## Doc update patterns (2026-08-18, stale-doc-cleanup)
+> **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
+> Read it at session start before this file. It contains project identity,
+> S-S-D model, communication channels, repo layout, Asana tags, tool/model
+> matrix, release pipeline, concurrency guardrails, and known issues.
+> Update it when shared state changes; keep role-specific instructions here.
+
+
 
 15. **Cross-doc consistency on architectural decisions** — When a decision (like B2: SQLite→Postgres) revises earlier docs, check ALL references across decision docs, scope docs, and decision-derived content (D3's "Memory v1" sections). Use search + grep for the OLD term (e.g., "SQLite backup", "SQLite+NLEmbedding") to surface stale references. Patch all at once.
 16. **API naming — check decision docs, implementation refs, and scope docs** — When standardizing API names (categorize→classify), search across ALL decision sections (B1 mentions in full capability registry, D1 mentions in shared capabilities, F8 mentions in cross-domain), skill-platform-runner scope (implementation+architecture), shared-capabilities scope (authoritative), and any "before build" docs. Decision docs can have 2-4 references per feature.
