@@ -110,6 +110,27 @@ When Piyush says "ship vX.Y.Z", execute these steps IN ORDER:
 - [ ] Site: verify `hos-site/downloads/hOS-Server.dmg` is the new version (check file size)
 - [ ] `~/Downloads/hermes/hos/`: verify `hOS-Server-vX.Y.Z.dmg` exists
 
+### Step 6a: iOS/iPad ON-DEVICE launch gate (MANDATORY — simulator does NOT count)
+The Mac smoke test (step 3a) does NOT cover iOS. CloudKit crashes (e.g. the
+v0.6.5 CKContainer stored-property crash) reproduce ONLY on a real device with
+a real iCloud account — the simulator has no iCloud account and will pass a
+build that crashes on every real phone. This gate is why v0.6.4/v0.6.5 shipped
+crashing.
+- [ ] IF a physical iPhone is connected (`xcrun devicectl list devices` shows a `connected` device):
+      build the `hOS` scheme for that device (`-destination "id=<UDID>"`),
+      install via `xcrun devicectl device install app`,
+      launch via `xcrun devicectl device process launch --terminate-existing`,
+      wait 10s, confirm the process is still alive (not crashed).
+      Repeat for `hOSiPad` if an iPad is connected.
+      If it crashes: STOP — do NOT flip tags to `status-released`, file/annotate
+      the Asana bug with the crash log, tag `status-blocked`.
+      The device must be UNLOCKED for launch to succeed.
+- [ ] IF no physical device is connected: do NOT mark iOS/iPad tasks `status-released`.
+      Hold at `status-shipped` and post to Slack:
+      "iOS/iPad v<X.Y.Z> on TestFlight (VALID) but NOT released — needs on-device
+      launch confirmation. Reply 'ios launch ok v<X.Y.Z>' after verifying on your
+      iPhone." Only flip to `status-released` after Piyush confirms on-device launch.
+
 ### Step 7: Asana tag sync (MANDATORY)
 - [ ] Mark all version tasks → `status-shipped` + completed=True
 - [ ] After ALL builds VALID: mark → `status-released` (GID 1217510620734371) + keep completed=True
