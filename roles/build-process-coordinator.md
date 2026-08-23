@@ -77,6 +77,17 @@ When Piyush says "ship vX.Y.Z", execute these steps IN ORDER:
 - [ ] Copy DMG to `~/code/hos-site/downloads/hOS-Server.dmg` (stable name for site)
 - [ ] Push hos-site to GitHub (Synology pulls within 15m)
 
+### Step 3a: Smoke Test (MANDATORY — no release ships without passing)
+- [ ] Mount the DMG: `hdiutil attach ~/Downloads/hermes/hos/hOS-Server-vX.Y.Z.dmg -nobrowse`
+- [ ] Launch the app: `open "/Volumes/hOS-Server-vX.Y.Z/hOS Server.app"`
+- [ ] Wait 10 seconds: `sleep 10`
+- [ ] Verify process is alive: `pgrep -f "hOS Server" && echo "RUNNING" || echo "CRASHED"`
+- [ ] If CRASHED: check `~/Library/Logs/DiagnosticReports/hOS Server-*.ips` for crash details
+- [ ] If CRASHED: do NOT publish, do NOT upload to TestFlight, do NOT sync Asana tags
+- [ ] If CRASHED: file Asana bug task with crash log summary, tag status-blocked
+- [ ] If RUNNING: quit the app (`pkill -f "hOS Server"`), detach DMG (`hdiutil detach /Volumes/hOS-Server* -force`)
+- [ ] Only proceed to Step 4 (TestFlight) AFTER smoke test passes
+
 ### Step 4: iPhone Companion TestFlight
 - [ ] Archive `hOS` scheme: `xcodebuild archive -scheme "hOS" -configuration Release -destination "generic/platform=iOS"`
 - [ ] Export with `/tmp/hOS-export-options.plist` (method=app-store-connect, signingStyle=automatic)

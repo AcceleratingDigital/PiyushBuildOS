@@ -128,10 +128,16 @@ status-ready-to-build → status-in-progress → status-ready-for-qa → status-
 → status-docs-pending → status-docs-done → [RELEASE GATE]
 → bump version + package-release.sh + publish-release.sh
 → DMG drop to ~/Downloads/hermes/hos/
+→ SMOKE TEST: mount DMG, launch app, verify no crash (10s). If crash → STOP, file bug, rebuild.
 → TestFlight upload (iPhone Companion + iPad — ALL platforms, every release)
 → verify all builds VALID → status-shipped → Human Testing
 → status-released (FINAL)
 ```
+
+**Mandatory smoke test rule:** EVERY release must launch the app on mm4p and
+verify it runs without crashing for 10 seconds BEFORE publishing to TestFlight
+or syncing Asana tags. If the app crashes: STOP. File a bug task (status-blocked),
+fix, rebuild, re-test. No release ships without passing the smoke test.
 
 **Mandatory multi-platform rule:** EVERY release ships ALL apps — Mac DMG,
 iPhone Companion (TestFlight), and iPad "hOS Shared View" (TestFlight).
