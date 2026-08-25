@@ -1,0 +1,430 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1240 920" width="1240" height="920" font-family="'JetBrains Mono', 'SF Mono', 'Monaco', 'Cascadia Code', 'Roboto Mono', monospace">
+  <!-- ================================================================
+       PiyushBuildOS — Agentic Build Pipeline
+       Dark-themed SVG architecture diagram for GitHub README
+       ================================================================ -->
+
+  <defs>
+    <!-- Background grid pattern -->
+    <pattern id="grid" width="40" height="40" patternUnits="userSpaceOnUse">
+      <path d="M 40 0 L 0 0 0 40" fill="none" stroke="#1e293b" stroke-width="0.5"/>
+    </pattern>
+
+    <!-- Arrow markers — one per accent color -->
+    <marker id="ah-slate" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#64748b"/>
+    </marker>
+    <marker id="ah-cyan" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#22d3ee"/>
+    </marker>
+    <marker id="ah-emerald" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#34d399"/>
+    </marker>
+    <marker id="ah-violet" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#a78bfa"/>
+    </marker>
+    <marker id="ah-amber" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#fbbf24"/>
+    </marker>
+    <marker id="ah-rose" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#fb7185"/>
+    </marker>
+    <marker id="ah-orange" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#fb923c"/>
+    </marker>
+    <marker id="ah-blue" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#60a5fa"/>
+    </marker>
+    <marker id="ah-red" markerWidth="10" markerHeight="8" refX="9" refY="4" orient="auto">
+      <polygon points="0 0, 10 4, 0 8" fill="#ef4444"/>
+    </marker>
+  </defs>
+
+  <!-- Background -->
+  <rect width="1240" height="920" fill="#0d1117"/>
+  <rect width="1240" height="920" fill="url(#grid)"/>
+
+  <!-- =================================================================
+       TITLE
+       ================================================================= -->
+  <text x="620" y="34" fill="#e2e8f0" font-size="18" font-weight="700" text-anchor="middle" letter-spacing="-0.5">
+    PiyushBuildOS — Agentic Build Pipeline
+  </text>
+  <text x="620" y="52" fill="#64748b" font-size="11" text-anchor="middle">
+    End-to-end flow: idea → spec → build → QA → ship → human-tested release
+  </text>
+
+  <!-- =================================================================
+       STAGE HEADER BAR (numbered circles + stage names)
+       ================================================================= -->
+  <!-- Stage 1 -->
+  <circle cx="115" cy="82" r="13" fill="rgba(34,211,238,0.15)" stroke="#22d3ee" stroke-width="1.5"/>
+  <text x="115" y="86" fill="#22d3ee" font-size="11" font-weight="700" text-anchor="middle">1</text>
+  <!-- Stage 2 -->
+  <circle cx="305" cy="82" r="13" fill="rgba(52,211,153,0.15)" stroke="#34d399" stroke-width="1.5"/>
+  <text x="305" y="86" fill="#34d399" font-size="11" font-weight="700" text-anchor="middle">2</text>
+  <!-- Stage 3 -->
+  <circle cx="495" cy="82" r="13" fill="rgba(167,139,250,0.15)" stroke="#a78bfa" stroke-width="1.5"/>
+  <text x="495" y="86" fill="#a78bfa" font-size="11" font-weight="700" text-anchor="middle">3</text>
+  <!-- Stage 4 -->
+  <circle cx="685" cy="82" r="13" fill="rgba(251,191,36,0.15)" stroke="#fbbf24" stroke-width="1.5"/>
+  <text x="685" y="86" fill="#fbbf24" font-size="11" font-weight="700" text-anchor="middle">4</text>
+  <!-- Stage 5 -->
+  <circle cx="875" cy="82" r="13" fill="rgba(251,113,133,0.15)" stroke="#fb7185" stroke-width="1.5"/>
+  <text x="875" y="86" fill="#fb7185" font-size="11" font-weight="700" text-anchor="middle">5</text>
+  <!-- Stage 6 -->
+  <circle cx="1080" cy="82" r="13" fill="rgba(96,165,250,0.15)" stroke="#60a5fa" stroke-width="1.5"/>
+  <text x="1080" y="86" fill="#60a5fa" font-size="11" font-weight="700" text-anchor="middle">6</text>
+
+  <!-- Stage title labels -->
+  <text x="115" y="108" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Research</text>
+  <text x="115" y="121" fill="#64748b" font-size="9" text-anchor="middle">&amp; Intake</text>
+  <text x="305" y="108" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Requirements</text>
+  <text x="305" y="121" fill="#64748b" font-size="9" text-anchor="middle">&amp; Spec</text>
+  <text x="495" y="108" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Build</text>
+  <text x="495" y="121" fill="#64748b" font-size="9" text-anchor="middle">&amp; Implementation</text>
+  <text x="685" y="108" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">QA &amp; Review</text>
+  <text x="685" y="121" fill="#64748b" font-size="9" text-anchor="middle">Quality Gate</text>
+  <text x="875" y="108" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Documentation</text>
+  <text x="875" y="121" fill="#64748b" font-size="9" text-anchor="middle">&amp; Shipping</text>
+  <text x="1080" y="108" fill="#e2e8f0" font-size="11" font-weight="600" text-anchor="middle">Human Testing</text>
+  <text x="1080" y="121" fill="#64748b" font-size="9" text-anchor="middle">&amp; Release</text>
+
+  <!-- =================================================================
+       INTER-STAGE FLOW ARROWS (top row, between headers)
+       ================================================================= -->
+  <line x1="135" y1="82" x2="278" y2="82" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="325" y1="82" x2="468" y2="82" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="515" y1="82" x2="658" y2="82" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="705" y1="82" x2="848" y2="82" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="895" y1="82" x2="1052" y2="82" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+
+  <!-- =================================================================
+       STAGE 1 — RESEARCH & INTAKE  (cyan)
+       ================================================================= -->
+  <rect x="20" y="135" width="190" height="260" rx="8" fill="rgba(13,17,23,0.9)" stroke="#22d3ee" stroke-width="1.5"/>
+  <rect x="20" y="135" width="190" height="28" rx="8" fill="rgba(34,211,238,0.1)"/>
+  <rect x="20" y="148" width="190" height="15" fill="rgba(34,211,238,0.1)"/>
+  <text x="115" y="153" fill="#22d3ee" font-size="10" font-weight="600" text-anchor="middle">RESEARCH &amp; INTAKE</text>
+
+  <!-- Research items -->
+  <rect x="35" y="175" width="160" height="44" rx="5" fill="rgba(34,211,238,0.06)" stroke="#22d3ee" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="115" y="191" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Competitor Research</text>
+  <text x="115" y="205" fill="#64748b" font-size="8" text-anchor="middle">Market analysis &amp; benchmarks</text>
+
+  <rect x="35" y="227" width="160" height="44" rx="5" fill="rgba(34,211,238,0.06)" stroke="#22d3ee" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="115" y="243" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Feasibility Study</text>
+  <text x="115" y="257" fill="#64748b" font-size="8" text-anchor="middle">Technical &amp; scope validation</text>
+
+  <rect x="35" y="279" width="160" height="44" rx="5" fill="rgba(34,211,238,0.06)" stroke="#22d3ee" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="115" y="295" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Vertical Slice Definition</text>
+  <text x="115" y="309" fill="#64748b" font-size="8" text-anchor="middle">Minimal end-to-end scope</text>
+
+  <!-- Signal pill -->
+  <rect x="45" y="335" width="140" height="22" rx="11" fill="rgba(34,211,238,0.12)" stroke="#22d3ee" stroke-width="1"/>
+  <text x="115" y="350" fill="#22d3ee" font-size="8" font-weight="600" text-anchor="middle">⚡ Signal: "Ready to Plan"</text>
+
+  <!-- Model badge -->
+  <rect x="45" y="365" width="140" height="18" rx="4" fill="rgba(34,211,238,0.06)" stroke="#22d3ee" stroke-width="0.75" stroke-opacity="0.4"/>
+  <text x="115" y="378" fill="#64748b" font-size="7" text-anchor="middle">Hermes · algolia/xlarge</text>
+
+  <!-- =================================================================
+       STAGE 2 — REQUIREMENTS & SPEC  (emerald)
+       ================================================================= -->
+  <rect x="210" y="135" width="190" height="260" rx="8" fill="rgba(13,17,23,0.9)" stroke="#34d399" stroke-width="1.5"/>
+  <rect x="210" y="135" width="190" height="28" rx="8" fill="rgba(52,211,153,0.1)"/>
+  <rect x="210" y="148" width="190" height="15" fill="rgba(52,211,153,0.1)"/>
+  <text x="305" y="153" fill="#34d399" font-size="10" font-weight="600" text-anchor="middle">REQUIREMENTS &amp; SPEC</text>
+
+  <!-- Requirements Agent -->
+  <rect x="225" y="175" width="160" height="36" rx="5" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="305" y="189" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Requirements Agent</text>
+  <text x="305" y="202" fill="#64748b" font-size="8" text-anchor="middle">Creates feature/{slug} branch</text>
+
+  <!-- UX Designer -->
+  <rect x="225" y="219" width="160" height="36" rx="5" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="305" y="233" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">UX Designer Agent</text>
+  <text x="305" y="246" fill="#64748b" font-size="8" text-anchor="middle">UX Design Doc · Journeys</text>
+
+  <!-- 3-section spec -->
+  <rect x="225" y="263" width="160" height="58" rx="5" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="305" y="277" fill="#34d399" font-size="8" font-weight="600" text-anchor="middle">3-SECTION SPEC</text>
+  <text x="240" y="291" fill="#e2e8f0" font-size="8">▸ WHAT</text>
+  <text x="240" y="303" fill="#e2e8f0" font-size="8">▸ HOW</text>
+  <text x="240" y="315" fill="#e2e8f0" font-size="8">▸ BUILD READINESS</text>
+
+  <!-- Handoff pill -->
+  <rect x="225" y="331" width="160" height="26" rx="4" fill="rgba(52,211,153,0.1)" stroke="#34d399" stroke-width="0.75"/>
+  <text x="305" y="344" fill="#34d399" font-size="7" font-weight="600" text-anchor="middle">branch → Asana notes</text>
+  <text x="305" y="354" fill="#34d399" font-size="7" text-anchor="middle">status-ready-to-build</text>
+
+  <!-- Model badge -->
+  <rect x="225" y="365" width="160" height="18" rx="4" fill="rgba(52,211,153,0.06)" stroke="#34d399" stroke-width="0.75" stroke-opacity="0.4"/>
+  <text x="305" y="378" fill="#64748b" font-size="7" text-anchor="middle">Hermes · algolia/xlarge</text>
+
+  <!-- =================================================================
+       STAGE 3 — BUILD & IMPLEMENTATION  (violet)
+       ================================================================= -->
+  <rect x="400" y="135" width="190" height="260" rx="8" fill="rgba(13,17,23,0.9)" stroke="#a78bfa" stroke-width="1.5"/>
+  <rect x="400" y="135" width="190" height="28" rx="8" fill="rgba(167,139,250,0.1)"/>
+  <rect x="400" y="148" width="190" height="15" fill="rgba(167,139,250,0.1)"/>
+  <text x="495" y="153" fill="#a78bfa" font-size="10" font-weight="600" text-anchor="middle">BUILD &amp; IMPLEMENTATION</text>
+
+  <!-- Coordinator -->
+  <rect x="415" y="175" width="160" height="40" rx="5" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="495" y="190" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">BuildProcessCoordinator</text>
+  <text x="495" y="204" fill="#64748b" font-size="8" text-anchor="middle">Picks up branch → git worktree</text>
+
+  <!-- Coder Agent -->
+  <rect x="415" y="223" width="160" height="40" rx="5" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="495" y="238" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Coder Agent</text>
+  <text x="495" y="252" fill="#64748b" font-size="8" text-anchor="middle">Implements on feature branch</text>
+
+  <!-- State files -->
+  <rect x="415" y="271" width="160" height="36" rx="5" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="495" y="285" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">State Tracking</text>
+  <text x="495" y="298" fill="#64748b" font-size="8" text-anchor="middle">STATE.md · PLAN.md</text>
+
+  <!-- Tag pill -->
+  <rect x="425" y="317" width="140" height="22" rx="11" fill="rgba(167,139,250,0.12)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="495" y="332" fill="#a78bfa" font-size="8" font-weight="600" text-anchor="middle">tag: status-ready-for-qa</text>
+
+  <!-- Model badge -->
+  <rect x="415" y="365" width="160" height="18" rx="4" fill="rgba(167,139,250,0.06)" stroke="#a78bfa" stroke-width="0.75" stroke-opacity="0.4"/>
+  <text x="495" y="378" fill="#64748b" font-size="7" text-anchor="middle">Claude CLI · algolia/xlarge</text>
+
+  <!-- =================================================================
+       STAGE 4 — QA & REVIEW  (amber)
+       ================================================================= -->
+  <rect x="590" y="135" width="190" height="260" rx="8" fill="rgba(13,17,23,0.9)" stroke="#fbbf24" stroke-width="1.5"/>
+  <rect x="590" y="135" width="190" height="28" rx="8" fill="rgba(251,191,36,0.1)"/>
+  <rect x="590" y="148" width="190" height="15" fill="rgba(251,191,36,0.1)"/>
+  <text x="685" y="153" fill="#fbbf24" font-size="10" font-weight="600" text-anchor="middle">QA &amp; REVIEW — GATE</text>
+
+  <!-- QA Agent -->
+  <rect x="605" y="175" width="160" height="36" rx="5" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="685" y="189" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">QA Agent (OpenCode)</text>
+  <text x="685" y="202" fill="#64748b" font-size="8" text-anchor="middle">Verifies acceptance criteria</text>
+
+  <!-- UX QA -->
+  <rect x="605" y="219" width="160" height="36" rx="5" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="685" y="233" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">UX QA Agent</text>
+  <text x="685" y="246" fill="#64748b" font-size="8" text-anchor="middle">Validates interaction flow</text>
+
+  <!-- 3 Parallel Reviews -->
+  <rect x="605" y="263" width="160" height="62" rx="5" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="685" y="277" fill="#fbbf24" font-size="8" font-weight="600" text-anchor="middle">3 PARALLEL REVIEWS</text>
+  <text x="615" y="291" fill="#e2e8f0" font-size="8">🔒 Security</text>
+  <text x="615" y="304" fill="#e2e8f0" font-size="8">⚡ Performance</text>
+  <text x="615" y="317" fill="#e2e8f0" font-size="8">👤 User Value</text>
+
+  <!-- Gate status -->
+  <rect x="615" y="333" width="140" height="22" rx="11" fill="rgba(251,191,36,0.12)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="685" y="348" fill="#fbbf24" font-size="8" font-weight="600" text-anchor="middle">All gates must PASS</text>
+
+  <!-- Model badge -->
+  <rect x="605" y="365" width="160" height="18" rx="4" fill="rgba(251,191,36,0.06)" stroke="#fbbf24" stroke-width="0.75" stroke-opacity="0.4"/>
+  <text x="685" y="378" fill="#64748b" font-size="7" text-anchor="middle">OpenCode · algolia/medium</text>
+
+  <!-- =================================================================
+       STAGE 5 — DOCUMENTATION & SHIPPING  (rose)
+       ================================================================= -->
+  <rect x="780" y="135" width="190" height="260" rx="8" fill="rgba(13,17,23,0.9)" stroke="#fb7185" stroke-width="1.5"/>
+  <rect x="780" y="135" width="190" height="28" rx="8" fill="rgba(251,113,133,0.1)"/>
+  <rect x="780" y="148" width="190" height="15" fill="rgba(251,113,133,0.1)"/>
+  <text x="875" y="153" fill="#fb7185" font-size="10" font-weight="600" text-anchor="middle">DOCS &amp; SHIPPING</text>
+
+  <!-- Docs Gate -->
+  <rect x="795" y="175" width="160" height="36" rx="5" fill="rgba(251,113,133,0.06)" stroke="#fb7185" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="875" y="189" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Site Agent — Docs Gate</text>
+  <text x="875" y="202" fill="#64748b" font-size="8" text-anchor="middle">No ship without doc URL</text>
+
+  <!-- Merge -->
+  <rect x="795" y="219" width="160" height="32" rx="5" fill="rgba(251,113,133,0.06)" stroke="#fb7185" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="875" y="239" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Merge to main</text>
+
+  <!-- Multi-platform release -->
+  <rect x="795" y="259" width="160" height="66" rx="5" fill="rgba(251,113,133,0.06)" stroke="#fb7185" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="875" y="273" fill="#fb7185" font-size="8" font-weight="600" text-anchor="middle">MULTI-PLATFORM RELEASE</text>
+  <text x="810" y="287" fill="#e2e8f0" font-size="8">🖥 Mac DMG (notarized)</text>
+  <text x="810" y="300" fill="#e2e8f0" font-size="8">📱 iPhone TestFlight</text>
+  <text x="810" y="313" fill="#e2e8f0" font-size="8">📱 iPad TestFlight</text>
+
+  <!-- Tag sync -->
+  <rect x="805" y="333" width="140" height="22" rx="11" fill="rgba(251,113,133,0.12)" stroke="#fb7185" stroke-width="1"/>
+  <text x="875" y="348" fill="#fb7185" font-size="7" font-weight="600" text-anchor="middle">status-shipped → released</text>
+
+  <!-- Model badge -->
+  <rect x="795" y="365" width="160" height="18" rx="4" fill="rgba(251,113,133,0.06)" stroke="#fb7185" stroke-width="0.75" stroke-opacity="0.4"/>
+  <text x="875" y="378" fill="#64748b" font-size="7" text-anchor="middle">Claude CLI · claude-sonnet-4-6</text>
+
+  <!-- =================================================================
+       STAGE 6 — HUMAN TESTING & RELEASE  (blue)
+       ================================================================= -->
+  <rect x="985" y="135" width="190" height="260" rx="8" fill="rgba(13,17,23,0.9)" stroke="#60a5fa" stroke-width="1.5"/>
+  <rect x="985" y="135" width="190" height="28" rx="8" fill="rgba(96,165,250,0.1)"/>
+  <rect x="985" y="148" width="190" height="15" fill="rgba(96,165,250,0.1)"/>
+  <text x="1080" y="153" fill="#60a5fa" font-size="10" font-weight="600" text-anchor="middle">HUMAN TESTING</text>
+
+  <!-- Human Testing Agent -->
+  <rect x="1000" y="175" width="160" height="40" rx="5" fill="rgba(96,165,250,0.06)" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="1080" y="190" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Human Testing Agent</text>
+  <text x="1080" y="204" fill="#64748b" font-size="8" text-anchor="middle">Structured testing on device</text>
+
+  <!-- Outcomes -->
+  <rect x="1000" y="223" width="160" height="74" rx="5" fill="rgba(96,165,250,0.06)" stroke="#60a5fa" stroke-width="1" stroke-opacity="0.5"/>
+  <text x="1080" y="237" fill="#60a5fa" font-size="8" font-weight="600" text-anchor="middle">OUTCOMES</text>
+  <text x="1010" y="252" fill="#34d399" font-size="8">✅ PASS — matches docs</text>
+  <text x="1010" y="267" fill="#fb7185" font-size="8">🐛 BUG — Asana task</text>
+  <text x="1010" y="282" fill="#fbbf24" font-size="8">💡 NEW FEATURE — task</text>
+
+  <!-- Final seal -->
+  <rect x="1000" y="305" width="160" height="28" rx="5" fill="rgba(96,165,250,0.08)" stroke="#60a5fa" stroke-width="1"/>
+  <text x="1080" y="323" fill="#60a5fa" font-size="9" font-weight="600" text-anchor="middle">🏁 Final Seal → "Stable"</text>
+
+  <!-- Model badge -->
+  <rect x="1000" y="365" width="160" height="18" rx="4" fill="rgba(96,165,250,0.06)" stroke="#60a5fa" stroke-width="0.75" stroke-opacity="0.4"/>
+  <text x="1080" y="378" fill="#64748b" font-size="7" text-anchor="middle">Guided by Hermes Agent</text>
+
+  <!-- =================================================================
+       INTER-STAGE FLOW ARROWS (between cards, lower)
+       ================================================================= -->
+  <line x1="210" y1="265" x2="218" y2="265" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="400" y1="265" x2="408" y2="265" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="590" y1="265" x2="598" y2="265" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="780" y1="265" x2="788" y2="265" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="985" y1="265" x2="993" y2="265" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+
+  <!-- =================================================================
+       REWORK LOOP — QA failure back to Coder (Stage 4 → Stage 3)
+       ================================================================= -->
+  <path d="M 685 395 Q 685 430 600 430 Q 495 430 495 410 L 495 400"
+        fill="none" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4"
+        marker-end="url(#ah-red)"/>
+  <rect x="520" y="416" width="150" height="18" rx="9" fill="rgba(239,68,68,0.12)" stroke="#ef4444" stroke-width="1"/>
+  <text x="595" y="429" fill="#ef4444" font-size="8" font-weight="600" text-anchor="middle">↺ REWORK LOOP — gate fail</text>
+
+  <!-- =================================================================
+       S-S-D MODEL — Foundational Layer
+       ================================================================= -->
+  <rect x="20" y="455" width="1155" height="130" rx="10" fill="rgba(13,17,23,0.95)" stroke="#475569" stroke-width="1.5"/>
+  <rect x="20" y="455" width="1155" height="26" rx="10" fill="rgba(71,85,105,0.15)"/>
+  <rect x="20" y="468" width="1155" height="13" fill="rgba(71,85,105,0.15)"/>
+  <text x="597" y="473" fill="#94a3b8" font-size="10" font-weight="600" text-anchor="middle">FOUNDATION — S-S-D Model (Single-Sourced Data): every piece of information has exactly one source of truth</text>
+
+  <!-- S-S-D Three columns -->
+  <!-- Intent → Asana -->
+  <rect x="50" y="495" width="340" height="76" rx="8" fill="rgba(34,211,238,0.04)" stroke="#22d3ee" stroke-width="1"/>
+  <text x="220" y="513" fill="#22d3ee" font-size="10" font-weight="700" text-anchor="middle">INTENT</text>
+  <text x="220" y="528" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Asana — the "What"</text>
+  <text x="220" y="543" fill="#64748b" font-size="8" text-anchor="middle">Requirements, specs, acceptance criteria</text>
+  <text x="220" y="557" fill="#64748b" font-size="8" text-anchor="middle">A-priori truth for the product</text>
+
+  <!-- Build → Git -->
+  <rect x="420" y="495" width="340" height="76" rx="8" fill="rgba(52,211,153,0.04)" stroke="#34d399" stroke-width="1"/>
+  <text x="590" y="513" fill="#34d399" font-size="10" font-weight="700" text-anchor="middle">BUILD</text>
+  <text x="590" y="528" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Git — the "How / Status"</text>
+  <text x="590" y="543" fill="#64748b" font-size="8" text-anchor="middle">Branch names, commit history, STATE.md</text>
+  <text x="590" y="557" fill="#64748b" font-size="8" text-anchor="middle">Evidence of progress</text>
+
+  <!-- Reality → Published artifacts -->
+  <rect x="790" y="495" width="340" height="76" rx="8" fill="rgba(251,113,133,0.04)" stroke="#fb7185" stroke-width="1"/>
+  <text x="960" y="513" fill="#fb7185" font-size="10" font-weight="700" text-anchor="middle">REALITY</text>
+  <text x="960" y="528" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Published Artifacts — the "Truth"</text>
+  <text x="960" y="543" fill="#64748b" font-size="8" text-anchor="middle">Doc URLs, DMG builds, TestFlight</text>
+  <text x="960" y="557" fill="#64748b" font-size="8" text-anchor="middle">User-facing truth (no ship without docs)</text>
+
+  <!-- S-S-D arrows -->
+  <line x1="390" y1="533" x2="418" y2="533" stroke="#475569" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <line x1="760" y1="533" x2="788" y2="533" stroke="#475569" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+
+  <!-- =================================================================
+       MODEL DIVERSITY PANEL
+       ================================================================= -->
+  <rect x="20" y="600" width="1155" height="130" rx="10" fill="rgba(13,17,23,0.95)" stroke="#fb923c" stroke-width="1.5"/>
+  <rect x="20" y="600" width="1155" height="26" rx="10" fill="rgba(251,146,60,0.1)"/>
+  <rect x="20" y="613" width="1155" height="13" fill="rgba(251,146,60,0.1)"/>
+  <text x="597" y="618" fill="#fb923c" font-size="10" font-weight="600" text-anchor="middle">MODEL DIVERSITY — Different agent + model per role to prevent single-point-of-failure bias</text>
+
+  <!-- 5 model cards -->
+  <!-- Coordinator -->
+  <rect x="50" y="640" width="210" height="76" rx="8" fill="rgba(167,139,250,0.04)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="155" y="658" fill="#a78bfa" font-size="9" font-weight="700" text-anchor="middle">COORDINATOR</text>
+  <text x="155" y="674" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Hermes</text>
+  <text x="155" y="688" fill="#64748b" font-size="8" text-anchor="middle">algolia/xlarge</text>
+  <text x="155" y="704" fill="#475569" font-size="7" text-anchor="middle">Triage · Dispatch · Merge</text>
+
+  <!-- Coder -->
+  <rect x="280" y="640" width="210" height="76" rx="8" fill="rgba(167,139,250,0.04)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="385" y="658" fill="#a78bfa" font-size="9" font-weight="700" text-anchor="middle">CODER</text>
+  <text x="385" y="674" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Claude CLI</text>
+  <text x="385" y="688" fill="#64748b" font-size="8" text-anchor="middle">algolia/xlarge</text>
+  <text x="385" y="704" fill="#475569" font-size="7" text-anchor="middle">Implementation · Unit tests</text>
+
+  <!-- QA -->
+  <rect x="510" y="640" width="210" height="76" rx="8" fill="rgba(251,191,36,0.04)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="615" y="658" fill="#fbbf24" font-size="9" font-weight="700" text-anchor="middle">QA</text>
+  <text x="615" y="674" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">OpenCode</text>
+  <text x="615" y="688" fill="#64748b" font-size="8" text-anchor="middle">algolia/medium</text>
+  <text x="615" y="704" fill="#475569" font-size="7" text-anchor="middle">Acceptance criteria · Tests</text>
+
+  <!-- Reviewer -->
+  <rect x="740" y="640" width="210" height="76" rx="8" fill="rgba(251,113,133,0.04)" stroke="#fb7185" stroke-width="1"/>
+  <text x="845" y="658" fill="#fb7185" font-size="9" font-weight="700" text-anchor="middle">REVIEWER</text>
+  <text x="845" y="674" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Codex</text>
+  <text x="845" y="688" fill="#64748b" font-size="8" text-anchor="middle">gpt-5.6-sol</text>
+  <text x="845" y="704" fill="#475569" font-size="7" text-anchor="middle">Security · Perf · Value</text>
+
+  <!-- Docs -->
+  <rect x="970" y="640" width="160" height="76" rx="8" fill="rgba(251,113,133,0.04)" stroke="#fb7185" stroke-width="1"/>
+  <text x="1050" y="658" fill="#fb7185" font-size="9" font-weight="700" text-anchor="middle">DOCS</text>
+  <text x="1050" y="674" fill="#e2e8f0" font-size="9" font-weight="600" text-anchor="middle">Claude CLI</text>
+  <text x="1050" y="688" fill="#64748b" font-size="8" text-anchor="middle">claude-sonnet-4-6</text>
+  <text x="1050" y="704" fill="#475569" font-size="7" text-anchor="middle">Doc pages · No drift</text>
+
+  <!-- =================================================================
+       LEGEND
+       ================================================================= -->
+  <rect x="20" y="745" width="1155" height="160" rx="10" fill="rgba(13,17,23,0.95)" stroke="#1e293b" stroke-width="1"/>
+  <text x="40" y="768" fill="#e2e8f0" font-size="10" font-weight="600">LEGEND</text>
+
+  <!-- Stage colors -->
+  <text x="40" y="788" fill="#64748b" font-size="8" font-weight="600">STAGE COLORS</text>
+  <rect x="40" y="795" width="14" height="10" rx="2" fill="rgba(34,211,238,0.1)" stroke="#22d3ee" stroke-width="1"/>
+  <text x="60" y="804" fill="#94a3b8" font-size="8">1 Research</text>
+  <rect x="130" y="795" width="14" height="10" rx="2" fill="rgba(52,211,153,0.1)" stroke="#34d399" stroke-width="1"/>
+  <text x="150" y="804" fill="#94a3b8" font-size="8">2 Requirements</text>
+  <rect x="245" y="795" width="14" height="10" rx="2" fill="rgba(167,139,250,0.1)" stroke="#a78bfa" stroke-width="1"/>
+  <text x="265" y="804" fill="#94a3b8" font-size="8">3 Build</text>
+  <rect x="325" y="795" width="14" height="10" rx="2" fill="rgba(251,191,36,0.1)" stroke="#fbbf24" stroke-width="1"/>
+  <text x="345" y="804" fill="#94a3b8" font-size="8">4 QA</text>
+  <rect x="395" y="795" width="14" height="10" rx="2" fill="rgba(251,113,133,0.1)" stroke="#fb7185" stroke-width="1"/>
+  <text x="415" y="804" fill="#94a3b8" font-size="8">5 Shipping</text>
+  <rect x="480" y="795" width="14" height="10" rx="2" fill="rgba(96,165,250,0.1)" stroke="#60a5fa" stroke-width="1"/>
+  <text x="500" y="804" fill="#94a3b8" font-size="8">6 Human Testing</text>
+
+  <!-- Line types -->
+  <text x="40" y="825" fill="#64748b" font-size="8" font-weight="600">FLOW TYPES</text>
+  <line x1="40" y1="832" x2="70" y2="832" stroke="#64748b" stroke-width="1.5" marker-end="url(#ah-slate)"/>
+  <text x="78" y="835" fill="#94a3b8" font-size="8">Forward flow</text>
+  <line x1="170" y1="832" x2="200" y2="832" stroke="#ef4444" stroke-width="2" stroke-dasharray="6,4" marker-end="url(#ah-red)"/>
+  <text x="208" y="835" fill="#94a3b8" font-size="8">Rework loop (gate failure)</text>
+
+  <!-- S-S-D layer -->
+  <text x="40" y="855" fill="#64748b" font-size="8" font-weight="600">FOUNDATIONAL LAYERS</text>
+  <rect x="40" y="862" width="14" height="10" rx="2" fill="rgba(34,211,238,0.04)" stroke="#22d3ee" stroke-width="1"/>
+  <text x="60" y="871" fill="#94a3b8" font-size="8">S-S-D: Intent (Asana)</text>
+  <rect x="180" y="862" width="14" height="10" rx="2" fill="rgba(52,211,153,0.04)" stroke="#34d399" stroke-width="1"/>
+  <text x="200" y="871" fill="#94a3b8" font-size="8">S-S-D: Build (Git)</text>
+  <rect x="310" y="862" width="14" height="10" rx="2" fill="rgba(251,113,133,0.04)" stroke="#fb7185" stroke-width="1"/>
+  <text x="330" y="871" fill="#94a3b8" font-size="8">S-S-D: Reality (Artifacts)</text>
+  <rect x="470" y="862" width="14" height="10" rx="2" fill="rgba(251,146,60,0.04)" stroke="#fb923c" stroke-width="1"/>
+  <text x="490" y="871" fill="#94a3b8" font-size="8">Model Diversity</text>
+
+  <!-- =================================================================
+       FOOTER
+       ================================================================= -->
+  <text x="620" y="905" fill="#475569" font-size="8" text-anchor="middle">
+    PiyushBuildOS · AcceleratingDigital/PiyushBuildOS · Agentic Build Process Framework
+  </text>
+</svg>
