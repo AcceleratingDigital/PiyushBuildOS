@@ -62,15 +62,39 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 ## Agent Role Matrix
 | Role | Primary Responsibility | Guardrail |
 |---|---|---|
-| **BuildProcessCoordinator** | Triage, Dispatch, Merge, Release | **NEVER** writes source code. |
-| **Requirements** | Research, Spec writing, Branching | Focuses on "What" and "How" (not implementation). |
-| **UX Designer** | User Journeys, Layouts, Micro-copy | Focuses on interaction intent, not implementation. |
-| **Coder** | Implementation, Unit Tests | Works only on assigned feature branches. |
-| **QA** | Spec verification, Integration testing | Cannot edit code; reports PASS/FAIL. |
-| **UX QA** | Usability, Friction, Consistency | Ignores bugs; focuses on the "feel" and flow. |
-| **Reviewer** | Security, Perf, UX auditing | Focuses on edge cases and quality, not functionality. |
-| **Site Agent** | Technical & Marketing docs | Ensures no "docs drift" between code and site. |
-| **Human Testing** | Guides product owner through release testing on real device | **NEVER** fixes bugs; logs them as Asana tasks and keeps moving. |
+| **Build Manager** (cron, autonomous) | Triage, Dispatch, Merge, Release | **NEVER** writes source code; **NEVER** commits directly to main |
+| **Process Coordinator** (interactive, Piyush-driven) | Oversight, status, process improvement | **NEVER** edits Swift/source; **NEVER** runs xcodebuild; **NEVER** pushes to main |
+| **Requirements** | Research, Spec writing, Branching | Focuses on "What" and "How" (not implementation) |
+| **UX Designer** | User Journeys, Layouts, Micro-copy | Focuses on interaction intent, not implementation |
+| **Coder** | Implementation, Unit Tests | Works only on assigned feature branches; cannot merge PRs |
+| **QA** | Spec verification, Integration testing | Cannot edit code; must independently verify audits (not accept coder self-reports) |
+| **UX QA** | Usability, Friction, Consistency | Ignores bugs; focuses on the "feel" and flow |
+| **Reviewer** | Security, Perf, UX auditing | Focuses on edge cases and quality, not functionality |
+| **Site Agent** | Technical & Marketing docs | Ensures no "docs drift" between code and site |
+| **Human Testing** | Guides product owner through release testing on real device | **NEVER** fixes bugs; logs them as Asana tasks and keeps moving |
+
+### Role Boundary Violations (Known Failures — Do Not Repeat)
+- **Process Coordinator editing source directly:** Caused Mac Server regression (Postgres startup failure). Required DMG rollback. Aug 2026.
+- **QA accepting coder self-declared audits:** Coder said "@Environment audit complete"; QA didn't verify independently. v0.6.11 shipped with same crash class. Aug 2026.
+- **QA approving guards without runtime verification:** SafeCKContainer guard read Info.plist for entitlements (impossible — they're in codesign signature). Always returned false. Silently broke CloudKit sync across all versions. Aug 2026.
+
+## QA Mandatory Additions (Aug 2026)
+
+### Runtime Correctness of Guards
+For any new guard or validation method: QA must identify the data source, verify it actually contains the expected key at runtime, and explain WHY the guard returns the correct value. Structural presence ≠ behavioral correctness.
+
+### Independent Audit Verification
+When a task claims an exhaustive audit ("X was the only instance"): QA must independently re-run the same search and confirm the count. Do not accept coder's self-reported count.
+
+## iOS Device Confirmation Gate (Mandatory)
+
+`processingState=VALID` in ASC does NOT mean releasable. Required before `status-released` on any iOS task:
+1. App VALID in ASC ✅
+2. Piyush installs on real device ✅
+3. App launches without crashing 10+ seconds ✅
+4. Piyush explicitly confirms ✅
+
+Simulators don't count — CloudKit crashes reproduce only on real devices with real iCloud accounts.
 
 ## Communication & Session Model
 
@@ -104,11 +128,18 @@ file. It contains cross-cutting state that affects every role:
 - Tool & model matrix (which CLI, which model, which escalation path)
 - Release pipeline (full flow from ready-to-build → released)
 - Concurrency guardrails (baton pattern, lock files, lease-based statuses)
+- Cross-role boundary table (what each role cannot do)
+- iOS device confirmation gate
 - Known issues & technical debt
 
 **Individual role files** (`<role>.md`) build on top of the shared context.
 If a conflict exists, the role file wins for role-specific behavior; the
 shared file wins for shared state and process rules.
+
+**Note on agent context files:** `docs/agent-context/*.md` are runtime files
+living in the requirements branch — they are NOT synced to PiyushBuildOS.
+PiyushBuildOS contains process framework (PROCESS_FRAMEWORK.md) and role
+stubs only. Runtime context evolves per-project; the framework is reusable.
 
 ## Key Process Artifacts
 - **Change Checklist:** The master contract for the process.
