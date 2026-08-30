@@ -208,3 +208,21 @@ This framework was extracted from the [hOS project](https://github.com/Accelerat
 ## License
 
 This framework is shared for reference and adaptation. See the [hOS repository](https://github.com/AcceleratingDigital/hos) for the project it was derived from.
+
+---
+
+## Getting Started with a New Project
+
+See **[ONBOARDING.md](ONBOARDING.md)** — the complete guide for starting fresh or taking over an existing project. Covers:
+- Required inputs (Asana, GitHub, Slack, site URL, local paths)
+- 4-checkout layout initialization
+- Asana tag setup
+- Taking over an existing repo (baseline audit, S-S-D reconciliation)
+
+**[PROJECT_CONFIG_TEMPLATE.md](PROJECT_CONFIG_TEMPLATE.md)** — fill-in-the-blank SHARED-CONTEXT.md for a new project.
+
+**[CRON_SETUP.md](CRON_SETUP.md)** — exact cron prompts, schedules, stagger reference, health verification.
+
+**[models/MODEL_VERIFICATION.md](models/MODEL_VERIFICATION.md)** — pre-start model health check. Run before first build.
+
+**[architecture/COLLISION_MODEL.md](architecture/COLLISION_MODEL.md)** — agent-agent, agent-human, and multi-user concurrency protocols.
