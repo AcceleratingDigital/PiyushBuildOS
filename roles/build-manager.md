@@ -104,6 +104,7 @@ When Piyush says "ship vX.Y.Z", execute these steps IN ORDER:
 - [ ] Common fix: unsigned nested binaries (Postgres, dylibs) — sign them + re-sign app + retry
 - [ ] Run `publish-release.sh X.Y.Z` (EdDSA sign, appcast, GitHub release)
 - [ ] Copy DMG to `~/Downloads/hermes/hos/hOS-Server-vX.Y.Z.dmg` — THIS IS MANDATORY, do not skip
+- [ ] Verify DMG by mounting: must contain app + Applications symlink, volume name "hOS Server", CFBundleVersion = integer. `hdiutil attach <dmg> -nobrowse` then `ls /Volumes/hOS\ Server/` — if no Applications symlink, the DMG was not built with package-release.sh and must be rebuilt.
 - [ ] Copy DMG to `~/code/{SITE_REPO}/downloads/hOS-Server.dmg` (stable name for site)
 - [ ] Push {SITE_REPO} to GitHub (Synology pulls within 15m)
 
