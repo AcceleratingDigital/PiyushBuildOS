@@ -91,6 +91,8 @@ When Piyush says "ship vX.Y.Z", execute these steps IN ORDER:
 - [ ] Verify all tasks for this version are `status-docs-done`
 - [ ] Verify no `status-blocked` tasks for this version
 - [ ] Verify Codex review completed on security-sensitive changes
+- [ ] Verify `CURRENT_PROJECT_VERSION` is a plain integer (e.g. 94), NOT a semver string — `grep CURRENT_PROJECT_VERSION project.pbxproj` must show an integer. If it's a string like "0.6.13", fix it before packaging.
+- [ ] Verify all 3 Info.plist files contain `ITSAppUsesNonExemptEncryption = NO` — prevents MISSING_EXPORT_COMPLIANCE on TestFlight uploads.
 
 ### Step 2: Version bump
 - [ ] Bump `MARKETING_VERSION` to vX.Y.Z in `project.pbxproj` (ALL targets — replace_all)
@@ -132,6 +134,7 @@ When Piyush says "ship vX.Y.Z", execute these steps IN ORDER:
 
 ### Step 6: Verify ALL builds
 - [ ] Poll ASC API: all builds must reach `processingState=VALID`
+- [ ] If stuck in `MISSING_EXPORT_COMPLIANCE`: all 3 Info.plist files need `ITSAppUsesNonExemptEncryption = NO`. Dispatch a coder to add it — do NOT manually PATCH the ASC API. One-time fix, prevents issue on all future uploads.
 - [ ] Mac DMG: verify `xcrun stapler validate` passes
 - [ ] GitHub release: verify asset is downloadable
 - [ ] appcast.xml: verify new version entry with EdDSA signature

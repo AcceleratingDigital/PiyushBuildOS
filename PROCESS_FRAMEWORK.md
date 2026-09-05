@@ -77,6 +77,8 @@ The process moves from abstract idea to shipped feature through a strict, gated 
 - **Process Coordinator editing source directly:** Caused Mac Server regression (Postgres startup failure). Required DMG rollback. Aug 2026.
 - **QA accepting coder self-declared audits:** Coder said "@Environment audit complete"; QA didn't verify independently. v0.6.11 shipped with same crash class. Aug 2026.
 - **QA approving guards without runtime verification:** SafeCKContainer guard read Info.plist for entitlements (impossible — they're in codesign signature). Always returned false. Silently broke CloudKit sync across all versions. Aug 2026.
+- **CURRENT_PROJECT_VERSION set to semver string instead of integer:** ASC requires an integer build number (94, 95…). Setting it to "0.6.13" causes ASC to reject uploads silently. MARKETING_VERSION = semver string; CURRENT_PROJECT_VERSION = integer only. Verify before every release: `grep CURRENT_PROJECT_VERSION project.pbxproj` — must be a plain integer.
+- **MISSING_EXPORT_COMPLIANCE blocking TestFlight:** Builds get stuck and never reach VALID until manually patched via ASC API. Permanent fix: add `ITSAppUsesNonExemptEncryption = NO` (boolean false) to all target Info.plist files. Must be in ALL targets (Mac + iPhone + iPad). No code change needed — plist key only. Do this once at project setup and never again.
 
 ## QA Mandatory Additions (Aug 2026)
 
