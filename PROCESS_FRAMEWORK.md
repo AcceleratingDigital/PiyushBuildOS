@@ -148,10 +148,67 @@ file. It contains cross-cutting state that affects every role:
 If a conflict exists, the role file wins for role-specific behavior; the
 shared file wins for shared state and process rules.
 
-**Note on agent context files:** `docs/agent-context/*.md` are runtime files
-living in the requirements branch — they are NOT synced to PiyushBuildOS.
-PiyushBuildOS contains process framework (PROCESS_FRAMEWORK.md) and role
-stubs only. Runtime context evolves per-project; the framework is reusable.
+**Note on agent context files (UPDATED 2026-09-12):** the single copy of role
+context files now lives in PiyushBuildOS `roles/`. Product repos may carry a
+pointer README only. Runtime/process state is Layer C (`~/code/hos-state/`,
+not in git) — see Three-Layer Separation below.
+
+## Gate Contracts (machine-checkable, added 2026-09-12)
+
+Each pipeline gate lists its REQUIRED inputs. A trigger script validates these
+before firing the next step. If any check fails → tag `status-blocked` + Slack
+alert to #piyush-mm4p-hosbuildprocess. No soft passes.
+
+### Gate: Ready-to-Build → dispatch coder
+- [ ] Asana task has `status-ready-to-build` tag
+- [ ] Branch name present in Asana notes; branch exists on origin
+- [ ] `docs/scope/{slug}.md` exists on that branch
+- [ ] Spec has WHAT / HOW / BUILD READINESS sections
+
+### Gate: Coder → QA
+- [ ] Branch has new commits beyond its fork point
+- [ ] Task feedback file exists in `~/code/hos-state/pipeline-stats/{slug}.json` (or Asana notes updated)
+- [ ] Worktree at `/tmp/hos-build-{slug}` is a REAL git worktree (`git worktree list` contains it; `readlink` empty)
+
+### Gate: QA → Security review
+- [ ] QA verdict recorded (PASS/FAIL per acceptance criterion) in feedback file
+- [ ] Evidence paths cited (test output, screenshots, logs) — self-reports rejected
+
+### Gate: Security → Merge
+- [ ] Security verdict = APPROVED in feedback file
+- [ ] No uncommitted changes in the worktree
+- [ ] Auto-merge may fire (PR + merge + DELETE feature branch local+remote — see branch hygiene)
+
+### Gate: Merge → Release
+- [ ] `git status` clean on main after merge
+- [ ] `CURRENT_PROJECT_VERSION` is a plain integer in ALL targets (`grep CURRENT_PROJECT_VERSION .../project.pbxproj`)
+- [ ] `MARKETING_VERSION` is semver string
+- [ ] `readlink /tmp/hos-build-*` — none point at a real checkout
+- [ ] DMG built ONLY by `package-release.sh`; mount-verify: Applications symlink + volume "hOS Server" + CFBundleVersion integer
+- [ ] iPhone + iPad archives uploaded to ASC; all builds reach VALID (ITSAppUsesNonExemptEncryption=NO in all 3 Info.plist)
+- [ ] DMG copied to `~/Downloads/hermes/hos/` + site publish ran
+
+### Gate: Release → Released
+- [ ] Piyush device-confirmed on all 3 platforms (SMOKE TEST RULE + iOS device gate)
+- [ ] Slack notification posted to #piyush-mm4p-hosbuildprocess
+
+## Three-Layer Separation (locked 2026-09-12)
+
+- **Layer A — Product (hos-monorepo):** product code + branches ONLY. No process docs, no runtime state.
+- **Layer B — Process (PiyushBuildOS):** PROCESS_FRAMEWORK.md, role files (single copy), gate contracts, incident corpus (`docs/process-incidents.md`).
+- **Layer C — Runtime state (`~/code/hos-state/`):** NOT a git repo, machine-local, transient. `STATUS.json` (schema 2) is the SINGLE STANDARD STATUS POINT — every actor reports there, every status question is answered from there. `pipeline-stats/{slug}.json` per-task files. Backup: daily 3am cron tar → `~/code/hos-state-backups/` (7-day retention).
+- One-writer rules: STATUS.json updated by watchdog/trigger scripts only; each step writes only its own task file; queue modified only by trigger.sh/fail.sh.
+- Control surface (Hermes desktop + Slack #piyush-mm4p-hosbuildprocess): same charter, same STATUS.json. Action logged to STATUS.json/baton log BEFORE responding. Cross-surface continuity = read STATUS.json, never conversation replay.
+
+## Concurrency Rules (consolidated 2026-09-12)
+
+- Staggered cron schedules (coordinator :00/:10, requirements :05/:25/:45) — never overlap on the same workdir.
+- NEVER remove `workdir` from a cron to fix locks — it silently drops AGENTS.md context injection. Stagger instead.
+- Manual cronjob `run` is a no-op if the scheduler tick is already executing — don't stack manual runs on top of scheduled ones.
+- One task at a time through the pipeline (queue depth 3 max, serialized dispatch).
+- One hOS Server at a time (CloudKit single-writer).
+- Layer C one-writer rules (see Three-Layer Separation).
+- Pause protocol: when Piyush works manually on the machine, pipeline crons pause; resumed only on explicit all-clear.
 
 ## Key Process Artifacts
 - **Change Checklist:** The master contract for the process.
