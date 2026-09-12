@@ -11,9 +11,16 @@ The fundamental rule of this process is that every piece of information has exac
 ## The 4-Checkout Layout (Role Isolation)
 To prevent "context pollution" and accidental edits, different agents work in isolated checkouts:
 1. **Monorepo/BuildProcessCoordinator:** (Main branch) Only the BuildProcessCoordinator agent commits here. Handles merges, worktrees, and final releases.
-2. **Requirements:** (Requirements branch) Where the Requirements Agent + Human design specs and create feature branches.
-3. **Dev/Interactive:** (Dev branch) For rapid prototyping, one-off fixes, and interactive sessions.
+2. **Requirements:** (Requirements branch) Where the Requirements Agent + Human design specs and create feature branches. NOTE: this is a second checkout of the SAME repository as the monorepo (AcceleratingDigital/hos.git) — not a separate repo. The `requirements` branch is a state-log branch (req-agent cycle logs); it is never merged to main.
+3. **Dev/Interactive:** ~~(Dev branch)~~ RETIRED 2026-09-12: the old hos-dev checkout (pre-monorepo `hos.git` clone) was decommissioned — local `dev` branch (896 commits, stale) archived to `archive/dev-pre-monorepo`, checkout deleted. Do not recreate.
 4. **Site:** (Standalone repo) Dedicated to documentation and marketing.
+
+### Branch hygiene rules (added 2026-09-12, after ~350→61 branch cleanup)
+- **Delete on merge:** the coordinator merge step MUST delete the feature branch (local + remote) immediately after merge. A merged branch that still exists is drift.
+- **One branch per Asana GID:** name is `feature/{slug}` tied to the task GID. BANNED suffixes: `-fresh`, `-v2`, `-rebased`, `-2`. If a branch needs a redo, delete/archive the old one first, reuse the GID's canonical name.
+- **Weekly drift check:** drift-audit cron counts `git branch --no-merged origin/main`; alert if > 5.
+- **Full deletion log:** every branch deletion (bulk or single) is recorded with its tip SHA in `hos-monorepo/docs/pipeline-stats/branch-cleanup-2026-09.md` so future issue searches can recover history (`git cat-file -p <sha>`; GitHub audit log has the delete events).
+- **Worktrees must be real:** `/tmp/hos-build-{slug}` must be a `git worktree` directory, NEVER a symlink to a checkout (the Aug 2026 symlink-to-main incident poisoned the shared tree and shipped a wrong-versioned DMG). Pre-package check: `readlink /tmp/hos-build-*` must not resolve to `~/code/hos-monorepo`.
 
 ## The Agentic Pipeline (The "Loop")
 The process moves from abstract idea to shipped feature through a strict, gated pipeline:
