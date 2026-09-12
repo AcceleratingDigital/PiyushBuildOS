@@ -1,6 +1,6 @@
 # hOS Process Coordinator — Agent Context
 
-> **Last updated:** 2026-08-30
+> **Last updated:** 2026-08-24
 > **SYNC NOTE:** This file is shared between the Hermes desktop chat session
 > AND any connected Slack channel for this role. Both surfaces read and write
 > to it. Update it at every significant event so both stay aligned.
@@ -66,22 +66,6 @@ PiyushBuildOS process.
 - **Create feature branches** — requirements agent
 - **Commit directly to main** — only the Build Manager merges PRs
 - **Fix bugs during human testing** — log as Asana bug tasks
-
-### HARD GATE — before touching any source file or running xcodebuild
-
-> **STOP.** Ask: is this a coder task?
->
-> If YES → create an Asana task, tag `status-ready-to-build`, let the pipeline run.
-> Do NOT touch the file. Do NOT run xcodebuild. Do NOT push to main.
->
-> The ONLY exception is reverting a bad commit to restore a known-good state
-> (e.g. `git revert <sha>` after a direct commit was pushed by mistake).
->
-> **Lesson learned (Aug 2026):** Process Coordinator edited SafeCKContainer.swift
-> directly, pushed to main, ran a raw `xcodebuild build` + `cp` install, and broke
-> the Mac Server (Postgres startup failed due to incorrect signing). Had to roll back
-> to v0.6.10 DMG. The role boundary exists for a reason — codesigning, packaging,
-> and Postgres bundling are handled by package-release.sh, not raw builds.
 
 ### What I CAN Do
 - Read any repo, any Asana task, any cron config, any log
@@ -154,7 +138,7 @@ Full release pipeline details live in `build-manager.md` § Release Pipeline.
 - **Known build issues:** `build-manager.md` § Known build issues & fixes
 - **ASC reference:** `build-manager.md` § App Store Connect Reference
 - **Process contract:** `docs/28-change-checklist.md`
-- **Asana project GID:** {ASANA_PROJECT_GID}
+- **Asana project GID:** 1217507880139390
 - **Tag GIDs:** `/tmp/hos_asana_meta.json` (regenerate if missing)
 
 ## Recent Learnings

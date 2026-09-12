@@ -1,5 +1,39 @@
 # hOS Human Testing Agent — Role Context
 
+> **Current Testing State (2026-09-08 05:35 CDT, monitor-watchdog):** v0.6.14
+> RELEASED — Mac DMG b96 signed/notarized and installed on mm4p (verified),
+> iOS + iPad b96 VALID on TestFlight (iPhone ASC 6804103657, iPad ASC
+> 6804324471), appcast live. The Sep-7 b96 string-build-number blocker is
+> RESOLVED — superseded entry below kept for history. The "Do NOT install /
+> do NOT upload" warnings in the Sep-7 block no longer apply.
+>
+> **Historical (2026-09-07 00:45 CDT):** No rebuild since last
+> check. b96 DMG still carries NON-INTEGER build number —
+> `hos-server/dist/hOS-Server-v0.6.13-b96.dmg` (18:43, signed+notarized) has
+> CFBundleVersion `0.6.13-b96` (string), NOT integer (verified by mounting
+> read-only, detached after). Repo pbxproj remains integer 95 across all
+> configs (since 19:51), so the stamp bug is in package-release.sh's DMG
+> stamping. Installed /Applications copy has the same string build number.
+> Prior blocker reports 19:39 / 20:05 / 20:52 / 22:15; ESCALATION posted to
+> C0BRKHLDB7Z at 00:45 noting ~5h15m stall, pre-fix DMG still in dist,
+> no coordinator activity ([SILENT] cycles since 00:02), and the
+> stuck_alerted_at watchdog-silencing pitfall. Do NOT install the 18:43
+> DMG; do NOT upload to TestFlight until fixed. Pipeline stalled 5h+;
+> no active builds.
+>
+> Re-verified 01:15 CDT: no change (DMG + installed app still string version,
+pbxproj still integer 95, no fix task dispatched). Second escalation posted
+to C0BRKHLDB7Z at 01:15 — note duplicate-escalation risk; next run should
+stay [SILENT] unless a fixed DMG or coordinator dispatch appears.
+
+MOVED since 20:52: coordinator (22:03 run) verified b96 installed+running
+> on mm4p (PID 60838, postgres 5433 OK, MCP 8737 live) and fired the test
+> approval via MCP mutation (`calendar_write` → PolicyCheckpoint, pending
+> approval "Create calendar event", member patelpk, id 01CC77E3) — CloudKit
+> outbox synced (pending=1), card should have pushed to Piyush's iPhone via
+> CKQuerySubscription. Awaiting Piyush's iPhone click to complete round-trip.
+> No active builds; one low-risk v2 task ready-to-build.
+
 > **Last updated:** 2026-08-22 (session 1 ongoing: v0.6.4 Mac + v0.6.1 iOS TestFlight)
 > **Purpose:** Guide Piyush through structured release testing on real
 > devices. This agent is a testing companion — it reads the feature docs,
@@ -11,6 +45,7 @@
 > chat session AND the connected Slack channel. Both agents read and write
 > to it. Update it at every iteration so both stay aligned. The file is
 > committed to the `requirements` branch in `~/code/hos-requirements/`.
+> Learnings that affect OTHER roles go to SHARED-CONTEXT.md, NOT just here.
 
 > **READ FIRST:** `SHARED-CONTEXT.md` — shared context for ALL agents.
 > Read it at session start before this file. It contains project identity,
@@ -212,6 +247,44 @@ After all features are tested (or Piyush says "stop"):
   - **Bug list** (Asana links + one-line description + severity)
   - **New Feature list** (Asana links + one-line description)
   - **Recommendation:** "Ready for release" or "Blocked by N critical bugs"
+
+## Approval E2E Test Procedure
+
+Repeatable smoke test for the approval flow: Mac Server → CloudKit outbox →
+iPhone/iPad receive → approve/deny → Mac sees outcome. Two entry points — the
+GUI card (Admin → Health → Send Test Approval) or the headless CLI flag.
+Use the CLI flag when the Mac app's UI can't be interacted with (build host,
+TCC dialogs); both produce the identical phone-side payload.
+
+**Entry point A — GUI card:**
+1. Open hOS Server → Admin → Health → "Send Test Approval" card
+2. Pick the member, press Send
+
+**Entry point B — CLI flag (headless):**
+1. Quit any running hOS Server, then launch the binary DIRECTLY (not via
+   `open -a` — `open` does not propagate the app's exit status, so the exit
+   code would be unobservable):
+   `"/Applications/hOS Server.app/Contents/MacOS/hOS Server" --hos-send-test-approval "<memberID-or-name>"`
+   (from an Xcode/DerivedData build, point at the binary inside that build's
+   .app instead, e.g.
+   `DerivedData/Build/Products/Release/hOS Server.app/Contents/MacOS/hOS Server`)
+   (member = ID like `ajay` or display name like `Ajay`, case-insensitive;
+   must exactly match a registered member — an unknown or ambiguous name
+   exits with an error listing valid members / matching member IDs)
+2. The app parks the approval, polls the member's CloudKit outbox until the
+   approval's write is confirmed (up to 30s), writes
+   `/tmp/hos-test-approval-report.txt` (member, approval UUID, outbox write
+   result, timestamp — also echoed to stdout), then quits by itself.
+   Exit code 0 = sent AND report written; exit 1 = any failure (also
+   cross-check the report file contents — the report states `sent` or
+   `FAILED` and the reason).
+
+**Then, for either entry point:**
+3. Check the member's iPhone/iPad: Approvals tab shows the "Test approval
+   from hOS Server" card within seconds (CloudKit sync)
+4. Approve (or decline) it there
+5. Check the Mac: Admin → Audit trail shows the resolution with the device
+   + timestamp; the card clears from the pending list
 
 ## Bug Routing — From Finding to Asana to Coder
 
@@ -472,13 +545,49 @@ v0.6.4 build in progress for re-testing.
 - iPhone/iPad connect via CloudKit (not LAN) using same iCloud account
 - LLM endpoint works fine (initial empty-API-key diagnosis was wrong)
 
-**Testing status (as of 2026-08-23):**
-- Mac Server: v0.6.3 running on mm4p — v0.6.4 and v0.6.5 BOTH CRASH
-- iOS Companion v0.6.5 on TestFlight — CRASHES ON LAUNCH (same CKContainer bug)
-- iPad app: Xcode template only, not functional, not impacted by crashes
-- TWO CRITICAL bugs blocking ALL testing:
-  - Bug 1217749232220364: CKContainer stored property crash — Mac v0.6.4 + iOS v0.6.5 (SYSTEMIC, 5+ unfixed iOS instances)
-  - Bug 1217749231385861: Postgres fire-and-forget → EXC_BAD_ACCESS — Mac v0.6.5 only
-- Both must be fixed in v0.6.6 before any re-testing can happen
-- laptop-m1: v0.6.1, not running — will get v0.6.6 for clean-machine validation
-- Next: wait for v0.6.6 build with both fixes, then re-test all 18 shipped bugs + new issues
+**Testing status (as of 2026-08-23, merged — device crash log analysis + coordinator update):**
+- Mac Server: v0.6.8 running on mm4p (up since 5:41 AM) — CKContainer fix is IN, no crash ✅
+- iOS Companion: device crash logs (27 pulled from iPhone via devicectl) show FOUR crashing versions: v0.6.5 (10x, CKQuery throw), v0.6.8 (6x), v0.6.9 (2x), v0.6.10 (9x) — v0.6.8-0.6.10 crash with @Environment assertion, a DIFFERENT bug that still exists in the latest builds
+- iPhone 14 Pro: connected to mm4p via cable — crash logs pullable via `xcrun devicectl device copy from --device <id> --source . --destination <dir> --domain-type systemCrashLogs`
+- Sophie's iPad (8th gen, iPadOS 18.6.2): **CANNOT INSTALL hOS** — deployment target is iOS 26.5, iPad 8th gen maxes below iOS 26. Developer Mode disabled (blocks crash pull + dev install). Family beta blocked on this device.
+- iPad app: Xcode template only, not functional
+- FIVE bugs for next debug build (full evidence in research brief 1217971187896940):
+  - 1217751312074924: iOS never rebuilt with CKContainer fix (release gap) — coordinator filed
+  - 1217971213934791: @Environment object never injected — iOS v0.6.8-0.6.10, STILL BROKEN in latest
+  - 1217971197472913: CKQuery.init throws from CompanionPairingDiscovery — iOS v0.6.5
+  - 1217749231385861: Postgres fire-and-forget → EXC_BAD_ACCESS — Mac v0.6.5 (verify fixed in v0.6.8)
+  - Deployment target decision (research 1217971171760303) needed BEFORE next iOS build
+- laptop-m1: v0.6.1, not running — needs next build for clean-machine validation
+- Next: requirements agent scopes debug build from research brief; deployment target decision gates the iOS build
+
+## 2026-09-06 — b96 build regression (testing coordinator)
+- PR #29 (Send Test Approval) merged to main Sep 6. package-release.sh run 11:14 Sep 6 clobbered CURRENT_PROJECT_VERSION 95→0.6.13 (agvtool + PlistBuddy stamp step) in app + pbxproj (uncommitted diff). No build 96 exists.
+- Installed /Applications/hOS Server.app on mm4p = Sep 4 b94 (no approval feature). iOS TestFlight b95 also predates the feature.
+- Flag posted to #piyush-mm4p-hosbuildprocess (C0BRKHLDB7Z): restore pbxproj to 95, bump 96, rebuild DMG (CFBundleVersion=96), install mm4p + upload iOS/iPad b96 TF.
+- Testing coordinator watching via cron job 376ac5c0292e (20m). Next: install b96 on mm4p → launch → Send Test Approval E2E test Mac→iPhone.
+
+### UPDATE 18:55 Sep 6 — b96 DMG produced but version REGRESSION persists
+- New DMG: `hos-server/dist/hOS-Server-v0.6.13-b96.dmg` (18:43). Mounted + verified: CFBundleVersion = **"0.6.13-b96"** (non-integer string) — NOT 96. Gate NOT met.
+- pbxproj diff: 95 → `0.6.13-b96` in all targets (uncommitted). agvtool stamp step still writing semver+suffix instead of integer.
+- Coordinator (e4b0b407e0fb 18:54 run) responded [SILENT] — no b96 activity, no Asana task in flight.
+- /Applications/hOS Server.app on mm4p still 0.6.13-b94 (old DMG version string; actual build Sep 4).
+- Alert posted to C0BRKHLDB7Z: rebuild requires integer CURRENT_PROJECT_VERSION=96; until then no mm4p install, no TestFlight upload.
+- Testing coordinator continues to hold: DO NOT install the 18:43 DMG on mm4p — it carries the same invalid build number the ASC upload would reject.
+
+### UPDATE 19:40 Sep 6 — still stalled on integer build number; re-nudged
+- New DMG `hOS-Server-v0.6.13-b96.dmg` (18:43) re-verified: CFBundleVersion = `0.6.13-b96` — gate still NOT met. pbxproj unchanged (`0.6.13-b96` in all 30 configs, uncommitted).
+- Installed /Applications app on mm4p = the 18:40 bad build (`0.6.13-b96`), running with postgres alive.
+- Coordinator cron (e4b0b407e0fb) runs every ~12m through 19:39 but logs show no b96 fix activity — only watchdog re-alerts. No one has picked up the pbxproj integer fix.
+- Nudge posted to C0BRKHLDB7Z (19:39) asking who owns the pbxproj fix. Stall elapsed: ~8h since the 11:17 flag.
+- Hold unchanged: no E2E test until pbxproj=96 → rebuilt DMG (CFBundleVersion=96) → re-install mm4p → Send Test Approval Mac→iPhone.
+
+### UPDATE 20:05 Sep 6 — regression stashed, main clean, but still no b96 rebuild
+- pbxproj fix: at 19:51 the watchdog (e4b0b407e0fb) stashed the uncommitted `0.6.13-b96` regression (stash@{0}, "watchdog: preserve pbxproj b96 regression for evidence"). Main is now clean at integer 95 (commit 05baecf2, verified all 30 configs). Regression cleared at source level.
+- DMG gate STILL NOT MET: 18:43 DMG re-mounted and re-verified — CFBundleVersion = "0.6.13-b96" (non-integer). No newer DMG exists.
+- Installed /Applications app on mm4p: still the 18:40 bad build (0.6.13-b96), running (PID 60838), postgres alive (19:04 checkpoints).
+- No rebuild/dispatch activity since the stash (~1h) — stall ~9h since the original 11:17 flag. Escalation posted to C0BRKHLDB7Z (20:05): rebuild needed with integer 96 → new DMG → re-install mm4p → Send Test Approval E2E.
+- Hold unchanged: do NOT install the 18:43 DMG; do NOT test against the installed 18:40 build for release purposes.
+- /Applications/hOS Server.app on mm4p updated 18:40 Sep 6, CFBundleVersion = `0.6.13-b96` (invalid) — the bad build WAS installed despite the hold, and is running (postgres log alive, 19:04 checkpoints). Send Test Approval feature is present but build number is not ASC-valid.
+- pbxproj still `0.6.13-b96` in all 30 configs (uncommitted, not fixed to integer 96) as of 19:18.
+- Watchdog (coordinator cron e4b0b407e0fb, 19:16 run) re-alerted the regression to C0BRKHLDB7Z — covers both DMG and installed app. No duplicate nudge posted by testing coordinator.
+- Still holding on E2E test: needs pbxproj → integer 96, rebuilt DMG (CFBundleVersion=96), re-install on mm4p, then Send Test Approval Mac→iPhone.

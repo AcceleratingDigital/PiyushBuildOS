@@ -1,5 +1,9 @@
 # User Value Reviewer — Learned Context
 
+> **SYNC NOTE:** This file is shared between all surfaces that run user value reviews.
+> Update it at every significant event so future runs stay aligned.
+> Learnings that affect OTHER roles (coder, QA, build) go to SHARED-CONTEXT.md, NOT just here.
+
 Read this file before starting any user value review. It accumulates UX
 patterns, past feedback, and accessibility requirements.
 
@@ -84,3 +88,14 @@ patterns, past feedback, and accessibility requirements.
 - "safe to auto-approve" as risk language nudges users toward unsafe automation — prefer neutral language like "low risk" or "routine action" that doesn't implicitly recommend a decision.
 - Templates added speculatively (loop:create/update/delete) with no corresponding requireApproval call site are untestable in the real flow and may rot. Always verify a template has a live producer before shipping.
 - Rule preview broad-rule warning only fires when selectedFields is completely empty — non-empty fields with unrecognized keys fall through to a conditionless preview with no warning. Broad-rule detection should check whether a recognizable condition was produced, not just whether input was empty.
+
+## CloudKit Approvals Sync diagnostics review (2026-08-22)
+
+- A status card's traffic light (glyph/color/pill) must key off the SAME conditions as its status line, across ALL failure dimensions — not just the write side. A "Syncing" green pill that ignores inbox-fetch errors or `accountStatus == noAccount` is actively misleading: it sends the user looking elsewhere when the path is broken. Healthy state requires account-available AND no write error AND recent successful sync cycle; each degraded dimension needs its own visible state. (HIGH)
+- Detecting success vs failure by `result.contains("OK")` on a human-readable string is fragile — a reworded or localized success message silently renders as a red failure, and "partial" cases pass/fail by accident. Return a structured status enum (`.ok/.warn/.fail` + message) from the operation and drive UI off the enum, not substring sniffing. (HIGH)
+- A diagnostic surface whose stated purpose is "no log-diving" must surface the actionable error, not "see log for code." If the CKError code + localizedDescription are already in hand at the catch site, put them in the admin-visible string (".quotaExceeded — iCloud storage full"), not just os_log. (MED)
+- New interactive UI elements in this project consistently get `accessibilityLabel`/`accessibilityHint` (role picker, stepper) — don't regress on new cards. `Image(systemName:)` with no label reads the SF Symbol name aloud; `ProgressView()` with no label is a bare spinner. Add `.accessibilityElement(children: .contain)` on dense detail-row blocks so VoiceOver groups them. (MED, repeat of 2026-08-17 + 2026-08-19)
+- Error/fetch-error values are the one row where full text matters — `lineLimit(1)` + middle-truncation can clip the exact reason the admin needs. Let error values wrap (`lineLimit(nil)`); reserve truncation for timestamps/IDs. (MED)
+- Don't append `env=\(env)` to a diagnostic detail when the code guarantees `env == "unknown"` on that platform (iOS entitlements API is macOS-only). Platform-meaningless tokens are developer noise to the user; strip them or substitute the platform-meaningful signal (account status on iOS). (LOW)
+- A Mac-side test-sync probe on the private cloud DB proves the Mac can write/read its OWN records — it does NOT prove the iPhone can read (separate device/account private-DB view, gated by same-account + push). Don't caption the test as proving the iPhone path; caption it as proving the Mac path and point to iPhone Connectivity for the rest. (LOW)
+- Diagnostics that must AGREE across Mac and iOS (account status, CloudKit environment) should live in a shared target, not be copy-pasted with subtly diverging guards (`canImport(Security)` vs `#if os(macOS)`). Cross-device diagnostics that diverge in implementation undermine the comparison they exist to support. (LOW)

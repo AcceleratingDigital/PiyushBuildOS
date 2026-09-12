@@ -1,5 +1,9 @@
 # Marketing Site Agent — Learned Context
 
+> **SYNC NOTE:** This file is shared between all surfaces that run site/marketing agents.
+> Update it at every significant event so future runs stay aligned.
+> Learnings that affect OTHER roles (docs, build) go to SHARED-CONTEXT.md, NOT just here.
+
 Read this file before updating the marketing site. It accumulates the design
 system, page templates, and update procedures.
 

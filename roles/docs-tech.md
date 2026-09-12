@@ -1,5 +1,9 @@
 # Tech Docs Agent — Learned Context
 
+> **SYNC NOTE:** This file is shared between all surfaces that run docs agents.
+> Update it at every significant event so future runs stay aligned.
+> Learnings that affect OTHER roles (coder, QA, build) go to SHARED-CONTEXT.md, NOT just here.
+
 Read this file before writing any technical documentation. It accumulates
 doc structure patterns, SKILL.md format, and code documentation conventions.
 
@@ -69,3 +73,34 @@ doc structure patterns, SKILL.md format, and code documentation conventions.
 - Open Loops user doc: LoopKind enum cases (.action/.chore/.mealplan/.grocery/.review/.info) translate to plain-English kind cards; LoopStatus lifecycle (draft→reviewed→approved→inProgress→completed + rejected/deferred) maps to numbered steps with plain labels; never expose enum raw values like "in_progress" to users.
 - Chores/delegation: assignedTo field + metadata["reward"]/metadata["recurrence"] translate to "parent creates, child completes, parent approves, reward tracked" — keep the approval-chain concept without mentioning UUIDs or member IDs.
 - Whitelisted loops: ApprovalBroker whitelist check applies to loop execution (mutate action), not loop creation — user doc says "loop goes straight from draft to completed" and notes it's still recorded/audited.
+
+---
+
+## Event-Driven Pipeline: Mandatory Final Steps
+
+**These calls are mandatory when running under the event-driven pipeline (HOS_TASK_GID is set).**
+
+On SUCCESS (docs generated) — call as your absolute last action:
+```bash
+~/ADTools/skills/hos-pipeline-trigger/trigger.sh \
+  --task-gid "$HOS_TASK_GID" \
+  --branch "$HOS_BRANCH" \
+  --scope-doc "$HOS_SCOPE_DOC" \
+  --completed-step docs \
+  --next-step coordinator-merge \
+  --summary "[one-line result, e.g. Docs complete: hos-site/docs/skills/my-feature.html generated]"
+```
+
+On FAILURE — call before exiting:
+```bash
+~/ADTools/skills/hos-pipeline-trigger/fail.sh \
+  --task-gid "$HOS_TASK_GID" \
+  --branch "$HOS_BRANCH" \
+  --failed-step docs \
+  --reason "[what failed, e.g. scope doc not found at docs/scope/slug.md on feature/slug]" \
+  --needed "[what human needs to do, e.g. ensure scope doc exists on the feature branch]"
+```
+
+**If HOS_TASK_GID is not set** (old cron-driven invocation): behave as before — no trigger or fail call needed.
+
+Pipeline envelope variables injected by trigger.sh: HOS_TASK_GID, HOS_BRANCH, HOS_SCOPE_DOC, HOS_COMPLETED_STEP, HOS_NEXT_STEP, HOS_SUMMARY, HOS_STARTED_AT.

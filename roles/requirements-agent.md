@@ -1,6 +1,10 @@
 # hOS Requirements & Research Agent — Agent Context
 
 > **Last updated:** 2026-08-16 20:10 CST
+> **SYNC NOTE:** This file is shared between the Hermes desktop chat session
+> AND any connected Slack channel for this role. Both surfaces read and write
+> to it. Update it at every significant event so both stay aligned.
+> Learnings that affect OTHER roles go to SHARED-CONTEXT.md, NOT just here.
 > **Purpose:** Persistent context for the requirements & research agent (this Hermes session).
 > If this session crashes or restarts, read this file + memory + the bootstrap doc to recover.
 
@@ -78,6 +82,32 @@ A 4-agent parallel review (competitive analysis, usability, feature gap, product
 
 Spec each item: WHAT/HOW/Build Readiness in ASANA TASK NOTES (not just on branch), feature branch, tag status-ready-to-build. Follow 5-step handoff. The spec MUST be in Asana notes — the BuildProcessCoordinator reads Asana notes, NOT branch files. A scope doc on a branch without the spec in Asana notes is an INCOMPLETE handoff. See docs/decisions/f2-approval-ux-update.md for F2 4-option flow details.
 
+## CKShare Multi-Account Research (2026-08-21)
+
+Research complete: `docs/research/ckshare-multi-account-refactor.md` (60KB) + `docs/research/cloudkit-sharing-apple-docs.md` (30KB) on requirements branch.
+
+**Problem:** All Mac↔iPhone communication uses `privateCloudDatabase` — only works when both devices share the same Apple ID. Family members with their own Apple IDs can't use the companion app.
+
+**Solution:** CKShare + sharedCloudDatabase. Owner (Mac) keeps private DB. Family members get CKShare invitations to per-member custom record zones (`hos-member-{memberID}`). Natural data isolation — each member only sees their own zone.
+
+**Critical findings:**
+- CKQuerySubscription does NOT work on sharedCloudDatabase — must use CKDatabaseSubscription (different API, server-change-token sync)
+- Default zone doesn't support sharing — must migrate to custom zones first
+- CKSharingSupported Info.plist key required for share URL handling
+- No entitlement changes needed
+- Max 100 participants per share, quota counts against owner
+- Total effort: ~25-35 engineering days across 5 phases
+
+**5-phase build plan:**
+- Phase 0: Prerequisites (iCloud identity on Member model, custom zone infra) — 2-3 days
+- Phase 1: Owner path refactor (per-member record IDs, still private DB) — 5-7 days
+- Phase 2: Custom zone migration — 3-4 days
+- Phase 3: CKShare implementation (critical path) — 7-10 days
+- Phase 4: Grocery sharing — 2-3 days
+- Phase 5: Legacy cleanup — 2-3 days
+
+**Requirements agent job:** Start speccing Phase 0 items. Write WHAT/HOW/Build Readiness IN ASANA TASK NOTES. Create feature branches. Do NOT tag status-ready-to-build yet — Piyush wants to review before build starts. Tag with `status-ready-to-plan` only.
+
 **V1 Decisions (final):**
 - Voice input → V1 (push-to-talk, Apple Speech framework)
 - Smart home → V2 (deferred entirely)
@@ -122,6 +152,7 @@ The requirements agent should reference the review findings when writing future 
 - Reference Hermes skills as reusable components in specs — hOS builds its own
 - Specify model names in specs — specs are model-agnostic
 - Create duplicate tracking tasks — tag/date existing tasks in place
+- Spec an already-shipped feature. BEFORE speccing any `status-ready-to-plan` task: search Asana for shipped tasks with the same feature keywords (list-project-tasks, grep names + status-shipped/released) and search git for shipped scope docs (`git log --all --oneline -- 'docs/scope/'`). If the scope already shipped, tag/date the existing task instead of creating a new one. (Caught 2026-09-07: v0.6.14 version-display scope was specced twice — task 1218200830986108 duplicated shipped task 1218205364697975.)
 
 ## Repo Layout (3 Checkouts — Stay in Your Lane)
 
