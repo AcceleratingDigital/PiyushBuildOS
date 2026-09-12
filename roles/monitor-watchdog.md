@@ -20,7 +20,7 @@ Build Manager — I don't own the pipeline; I own *detection of pipeline silence
 
 ## State file
 
-`~/code/hos-monorepo/hos-server/docs/pipeline-stats/watchdog-state.json`
+`~/code/hos-state/STATUS.json` (single standard status point, schema 2 — runtime state is NOT in git)
 (gitignored). Schema: `last_run`, `active_build`, `task_states` (per-task
 status + notes), `queue` (count per status tag), `stuck_alerted_at`,
 `stuck_alert_reason`, `new_builds_paused`, `pipeline_note`.
