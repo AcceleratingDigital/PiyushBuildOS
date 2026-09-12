@@ -94,3 +94,12 @@ If the same stage is stuck > 2h after an intervention, escalate again with
   the TERMINAL_CWD lock and starves the requirements agent (5460s timeouts x6).
   First hang self-resolved after ~5h; second needed escalation. Escalation
   path used: second alert to C0BRKHLDB7Z per >2h-after-intervention rule.
+
+## Drift audit checks (added 2026-09-12 — run when drift audit cron resumes)
+1. `git branch --no-merged origin/main | wc -l` per product repo — alert if > 5
+2. STATUS.json schema field == 2, and updated_at is recent (stale > 24h while pipeline active = stalled writer)
+3. transition_log durations: flag any stage averaging > 2x its historical median
+4. Queue consistency: every queued task GID exists in Asana; every in-progress GID has a live worktree
+5. Orphaned dispatches: process running with no matching queue entry or vice versa
+6. Model conflicts: role-file MODEL PINs vs cron prompt instructions — any mismatch is an incident
+7. Branch hygiene: no `-fresh`/`-v2`/`-rebased` branch names; merged branches all deleted
