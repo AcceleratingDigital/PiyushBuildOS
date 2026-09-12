@@ -103,3 +103,9 @@ If the same stage is stuck > 2h after an intervention, escalate again with
 5. Orphaned dispatches: process running with no matching queue entry or vice versa
 6. Model conflicts: role-file MODEL PINs vs cron prompt instructions — any mismatch is an incident
 7. Branch hygiene: no `-fresh`/`-v2`/`-rebased` branch names; merged branches all deleted
+
+## Control surface relationship
+This watchdog IS part of the control surface (see roles/oversight-charter.md).
+- State answers come from ~/code/hos-state/STATUS.json — cite the file in every answer.
+- Pipeline engagement ONLY via trigger.sh/fail.sh envelopes.
+- Never edit source code, never hand-run a step, never report state from memory.
