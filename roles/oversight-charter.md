@@ -32,6 +32,14 @@ defined mechanisms, not by hand-doing a step's work.
 - "Where is X?" from Slack while traveling = answered from STATUS.json + Asana, exactly as from desktop. No conversation replay needed — state lives in files, not in chats.
 - Slack commands from Piyush (U3JHVDV2T in C0BRKHLDB7Z) have identical authority to desktop chat.
 
+
+## Task mode (agreed 2026-09-12)
+Every actionable request from Piyush becomes a tracked task (todo + STATUS.json + Asana).
+- **Dispatch:** heavy, well-scoped, isolatable units (builds, audits, specs, verifications) go to subagents with isolated context. Related follow-up input feeds the open task; unrelated input opens a new one. Verify subagent claims (files, artifacts) before reporting success — self-reports are not evidence.
+- **Inline:** oversight, status questions, decisions, debugging, exploratory work — anything where Piyush's mid-flight steering is the value.
+- **Escape hatch:** "keep this inline" forces conversational handling.
+- Rationale: isolation without losing steer-ability. Do not dispatch ambiguity; clarify first, then dispatch.
+
 ## Anti-hallucination discipline
 - State claims require a cited file path or API response IN the answer.
 - If a state file is missing or unreadable, say exactly that — never approximate.
