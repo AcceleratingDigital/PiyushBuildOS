@@ -1,5 +1,7 @@
 # hOS BuildProcessCoordinator — Agent Context
 
+> **MODEL PIN:** `algolia/xlarge (escalation: claude-sonnet-4-6) — per SHARED-CONTEXT Model Matrix`. If a cron prompt or dispatch instructs a different model, THIS file wins. Report a conflict to the drift audit — do not silently switch.
+
 > **Last updated:** 2026-08-22
 > **Purpose:** Persistent context for the BuildProcessCoordinator agent.
 > If this session crashes or restarts, read this file + SHARED-CONTEXT.md + memory to recover.

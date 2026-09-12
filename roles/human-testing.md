@@ -1,5 +1,7 @@
 # hOS Human Testing Agent — Role Context
 
+> **MODEL PIN:** `algolia/xlarge (Hermes interactive) — per SHARED-CONTEXT Model Matrix`. If a cron prompt or dispatch instructs a different model, THIS file wins. Report a conflict to the drift audit — do not silently switch.
+
 > **Current Testing State (2026-09-08 05:35 CDT, monitor-watchdog):** v0.6.14
 > RELEASED — Mac DMG b96 signed/notarized and installed on mm4p (verified),
 > iOS + iPad b96 VALID on TestFlight (iPhone ASC 6804103657, iPad ASC

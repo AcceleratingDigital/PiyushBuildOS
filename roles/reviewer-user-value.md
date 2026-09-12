@@ -1,5 +1,7 @@
 # User Value Reviewer — Learned Context
 
+> **MODEL PIN:** `codex CLI with algolia/xlarge (escalation: claude-sonnet-4-6) — per SHARED-CONTEXT Model Matrix`. If a cron prompt or dispatch instructs a different model, THIS file wins. Report a conflict to the drift audit — do not silently switch.
+
 > **SYNC NOTE:** This file is shared between all surfaces that run user value reviews.
 > Update it at every significant event so future runs stay aligned.
 > Learnings that affect OTHER roles (coder, QA, build) go to SHARED-CONTEXT.md, NOT just here.

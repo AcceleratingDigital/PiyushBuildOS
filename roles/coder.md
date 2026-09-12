@@ -1,5 +1,7 @@
 # Coder Agent — Learned Context
 
+> **MODEL PIN:** `claude CLI with algolia/xlarge via LiteLLM (escalation: claude-sonnet-4-6) — per SHARED-CONTEXT Model Matrix`. If a cron prompt or dispatch instructs a different model, THIS file wins. Report a conflict to the drift audit — do not silently switch.
+
 > **SYNC NOTE:** This file is shared between all surfaces that run coder agents.
 > Update it at every significant event so future runs (cron or interactive) stay aligned.
 > Learnings that affect OTHER roles (QA, review, build) go to SHARED-CONTEXT.md, NOT just here.

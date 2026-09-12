@@ -1,5 +1,7 @@
 # QA Agent — Learned Context
 
+> **MODEL PIN:** `opencode CLI with algolia/medium (escalation: algolia/xlarge) — per SHARED-CONTEXT Model Matrix`. If a cron prompt or dispatch instructs a different model, THIS file wins. Report a conflict to the drift audit — do not silently switch.
+
 > **SYNC NOTE:** This file is shared between all surfaces that run QA agents.
 > Update it at every significant event so future runs stay aligned.
 > Learnings that affect OTHER roles (coder, review, build) go to SHARED-CONTEXT.md, NOT just here.

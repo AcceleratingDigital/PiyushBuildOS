@@ -1,5 +1,7 @@
 # hOS Build Manager — Agent Context
 
+> **MODEL PIN:** `algolia/xlarge (escalation: claude-sonnet-4-6) — per SHARED-CONTEXT Model Matrix`. If a cron prompt or dispatch instructs a different model, THIS file wins. Report a conflict to the drift audit — do not silently switch.
+
 > **Last updated:** 2026-09-08
 > **SYNC NOTE:** This file is shared between the Hermes desktop chat session
 > AND any connected Slack channel for this role. Both surfaces read and write
