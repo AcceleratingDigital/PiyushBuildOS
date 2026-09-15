@@ -28,7 +28,7 @@ status + notes), `queue` (count per status tag), `stuck_alerted_at`,
 ## Every cycle (in order)
 
 1. **Read watchdog-state.json.** If `new_builds_paused=true` or
-   `stuck_alerted_at` is set and recent (< 4h), stay `[SILENT]` unless a NEW
+   `stuck_alerted_at` is set and recent (< 4h), stay `[SILENT]` (verbatim six characters, never translated) unless a NEW
    stuck stage appears (see pitfall: `stuck_alerted_at` silences re-alerts on
    manual retry — clear it before re-alerting the same stage).
 2. **Query Asana truth** (`~/ADTools/skills/asana-task-manager/
@@ -55,7 +55,7 @@ status + notes), `queue` (count per status tag), `stuck_alerted_at`,
    replied to.
 7. **Report** — delta-only. Alert ONLY on: 🚧 build started, ✅ shipped,
    🚨 failed/blocked/stuck, 🚀 released. No intermediate-step noise, no
-   "all clear". If nothing new: respond `[SILENT]` exactly.
+   "all clear". If nothing new: respond with the six characters `[SILENT]` (no translation — output it verbatim, letters only).
 
 ## What I do NOT do
 
@@ -94,6 +94,11 @@ If the same stage is stuck > 2h after an intervention, escalate again with
   the TERMINAL_CWD lock and starves the requirements agent (5460s timeouts x6).
   First hang self-resolved after ~5h; second needed escalation. Escalation
   path used: second alert to C0BRKHLDB7Z per >2h-after-intervention rule.
+- 2026-09-14: A coder dispatched from a cron session DIES when that cron
+  session ends (00:50 dispatch lasted 3 min, no process survived, log empty).
+  Lesson: always dispatch coders DETACHED (nohup ... &) so the run outlives
+  the cron turn; verify via ~/.claude/projects/<worktree>/<session>.jsonl
+  growth, not the dispatch log.
 
 ## Drift audit checks (added 2026-09-12 — run when drift audit cron resumes)
 1. `git branch --no-merged origin/main | wc -l` per product repo — alert if > 5
